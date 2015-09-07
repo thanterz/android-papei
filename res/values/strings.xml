@@ -8,5 +8,9 @@
     <string name="ask_login">Already have an account?</string>
     <string name="signin">Sign in</string>
     <string name="title_activity_register">RegisterActivity</string>
+    <string name="email">Email</string>
+    <string name="emailinput">Email</string>
+    <string name="passwordinput">Password</string>
+    <string name="loginbtn">Login</string>
 
 </resources>
