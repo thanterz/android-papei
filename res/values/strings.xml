@@ -13,5 +13,6 @@
     <string name="passwordinput">Password</string>
     <string name="loginbtn">Login</string>
     <string name="title_activity_login_activity2">LoginActivity2</string>
+    <string name="title_activity_test">TestActivity</string>
 
 </resources>

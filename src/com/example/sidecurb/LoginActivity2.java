@@ -1,6 +1,6 @@
 package com.example.sidecurb;
 
-import android.app.Activity;
+import android.support.v7.app.ActionBarActivity;
 import android.net.MailTo;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -8,7 +8,7 @@ import android.provider.ContactsContract.CommonDataKinds.Email;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class LoginActivity2 extends Activity {
+public class LoginActivity2 extends ActionBarActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
