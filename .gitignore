@@ -1,7 +1,5 @@
 bin/
 libs/
-<<<<<<< HEAD
 mylibs/
-=======
-mylibs/
->>>>>>> branch 'master' of https://github.com/thanterz/android-papei.git
+.classpath
+project.properties
