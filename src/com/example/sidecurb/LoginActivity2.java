@@ -97,7 +97,7 @@ public class LoginActivity2 extends ActionBarActivity {
 		@Override
 		protected void onPostExecute(final Boolean success) {
 			if(success.equals(true)){
-				Intent intent = new Intent(LoginActivity2.this, TestActivity.class);
+				Intent intent = new Intent(LoginActivity2.this, MainScreenActivity.class);
 			    startActivity(intent);
             }
 		}
