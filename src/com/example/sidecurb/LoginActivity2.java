@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
+import org.apache.http.ParseException;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -14,75 +15,95 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.support.v7.app.ActionBarActivity;
-import android.net.MailTo;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.ContactsContract.CommonDataKinds.Email;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
 
 
 public class LoginActivity2 extends ActionBarActivity {
-
+	
+	EditText emailString;
+	EditText passwordString;
+	Button loginbtn;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login2);
+		emailString = (EditText) findViewById(R.id.emailinput);
+		passwordString = (EditText) findViewById(R.id.passwordinput);
+	    loginbtn = (Button) findViewById(R.id.loginbtn);
+	    loginbtn.setOnClickListener(new OnClickListener()
+	    {
+			  public void onClick(View v)
+			  {
+				  new CallApi().execute();
+				  	
+			  }
+	    });
+	}
+	
+	class CallApi extends AsyncTask<Void, Void, Boolean> {
 		
-		String emailString = getResources().getString(R.id.emailinput);
-		
-		
-		class CallApi extends AsyncTask<Void, Void, Boolean> {
-			
-			@Override
-			protected Boolean doInBackground(Void... params) {
-				// TODO: attempt authentication against a network service.
-				HttpClient httpclient = new DefaultHttpClient();
-				HttpPost httppost = new HttpPost("http://www.theama.info/curbweb/rest-auth/login/");
-				List<NameValuePair> nameValuePair = new ArrayList<NameValuePair>(2);
-				nameValuePair.add(new BasicNameValuePair("username", "thanterz"));
-				nameValuePair.add(new BasicNameValuePair("password", "papei"));
-				try {
-					httppost.setEntity(new UrlEncodedFormEntity(nameValuePair));
-				} catch (UnsupportedEncodingException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+		@Override
+		protected Boolean doInBackground(Void... params) {
+			// TODO: attempt authentication against a network service.
+			HttpClient httpclient = new DefaultHttpClient();
+			HttpPost httppost = new HttpPost("http://www.theama.info/curbweb/rest-auth/login/");
+			List<NameValuePair> nameValuePair = new ArrayList<NameValuePair>(2);
+			nameValuePair.add(new BasicNameValuePair("username", emailString.getText().toString()));
+			nameValuePair.add(new BasicNameValuePair("password", passwordString.getText().toString()));
+			try {
+				httppost.setEntity(new UrlEncodedFormEntity(nameValuePair));
+			} catch (UnsupportedEncodingException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+            HttpResponse response = null;
+			try {
+				response = httpclient.execute(httppost);
+			} catch (ClientProtocolException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+            try {
+				String json = EntityUtils.toString(response.getEntity());
+				if(json.indexOf("key")>-1){
+					return true;
 				}
-				try {
-		            HttpResponse response = httpclient.execute(httppost);
-		            // write response to log
-		            //Log.i("Http Post Response:skata", response.getEntity());
-		            //JSONObject json = new JSONObject(response.getEntity());
-		            String json = EntityUtils.toString(response.getEntity());		            
-		            //JSONArray temp1 = new JSONArray(json_string);
-		            Log.d("jsonobject", json);
-		        } catch (ClientProtocolException e) {
-		            // Log exception
-		            e.printStackTrace();
-		        } catch (IOException e) {
-		            // Log exception
-		            e.printStackTrace();
-		        } 
-				return null;
-
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			
-
-			@Override
-			protected void onPostExecute(final Boolean success) {
-				
-			}
+            
+            return null;
 
 		}
-		new CallApi().execute();
-	}
+		
 
+		@Override
+		protected void onPostExecute(final Boolean success) {
+			if(success.equals(true)){
+				Intent intent = new Intent(LoginActivity2.this, TestActivity.class);
+			    startActivity(intent);
+            }
+		}
+
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
