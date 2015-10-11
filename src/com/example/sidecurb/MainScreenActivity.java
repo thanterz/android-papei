@@ -25,9 +25,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -51,16 +55,18 @@ public class MainScreenActivity extends ActionBarActivity {
 	private ActionBarDrawerToggle mDrawerToggle;
     private String mActivityTitle;
     private HttpEntity json;
-	
+	private double lon;
+	private double lat;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main_screen);
-		
+		LocationManager mlocManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+		LocationListener mlocListener = new MyLocationListener();
+		mlocManager.requestLocationUpdates( LocationManager.GPS_PROVIDER, 0, 0, mlocListener);
 	 	mDrawerList = (ListView)findViewById(R.id.navList);
 	 	mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         mActivityTitle = getTitle().toString();
-        
         new CallApi().execute();
         addDrawerItems();
         setupDrawer();
@@ -240,5 +246,38 @@ public class MainScreenActivity extends ActionBarActivity {
 		
  
         return shops;
+    }
+    public class MyLocationListener implements LocationListener{
+
+	    @Override
+	    public void onLocationChanged(Location loc) {
+    		lat 	= loc.getLatitude();
+    		lon	= loc.getLongitude();
+			Toast.makeText( getApplicationContext(),"lat="+lat+" lon="+lon,Toast.LENGTH_SHORT).show();
+
+	    }
+
+
+	    @Override
+	    public void onProviderDisabled(String provider) {
+	
+	    	Toast.makeText( getApplicationContext(),"Gps Disabled",Toast.LENGTH_SHORT ).show();
+	
+	    }
+
+
+	    @Override
+	    public void onProviderEnabled(String provider){
+	
+	    	Toast.makeText( getApplicationContext(),"Gps Enabled",Toast.LENGTH_SHORT).show();
+	
+	    }
+
+	    @Override
+	    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+
+	    }
+
     }
 }
