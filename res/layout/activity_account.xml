@@ -3,22 +3,14 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainScreenActivity" >
+    tools:context=".AccountActivity" >
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".MainScreenActivity"
+        tools:context=".AccountActivity"
         android:background="#ffffffff">
 
-        <ListView
-            android:id="@+id/shopsList"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_gravity="left|start"
-            android:background="#ffeeeeee" />
 
     </RelativeLayout>
 

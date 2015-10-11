@@ -11,6 +11,7 @@
     <uses-permission
         android:name="android.permission.INTERNET"
         android:maxSdkVersion="23" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -50,6 +51,22 @@
         <activity
             android:name=".TestActivity"
             android:label="@string/title_activity_test" >
+        </activity>
+        <activity
+            android:name=".CategoriesActivity"
+            android:label="@string/title_activity_categories" >
+        </activity>
+        <activity
+            android:name=".CartActivity"
+            android:label="@string/title_activity_cart" >
+        </activity>
+        <activity
+            android:name=".AccountActivity"
+            android:label="@string/title_activity_account" >
+        </activity>
+        <activity
+            android:name=".FAQActivity"
+            android:label="@string/title_activity_faq" >
         </activity>
     </application>
 
