@@ -25,7 +25,7 @@ public class MainActivity extends ActionBarActivity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				//Intent intent = new Intent(MainActivity.this, LoginActivity2.class);
-				Intent intent = new Intent(MainActivity.this, MainScreenActivity.class);
+				Intent intent = new Intent(MainActivity.this, LoginActivity2.class);
 				startActivity(intent);
 			}
 		});
