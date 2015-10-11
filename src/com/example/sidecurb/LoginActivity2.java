@@ -25,6 +25,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 
 public class LoginActivity2 extends ActionBarActivity {
@@ -100,6 +101,9 @@ public class LoginActivity2 extends ActionBarActivity {
 				Intent intent = new Intent(LoginActivity2.this, MainScreenActivity.class);
 			    startActivity(intent);
             }
+			else{
+				Toast.makeText(getApplicationContext(), "Login error.Try again!", Toast.LENGTH_SHORT).show();
+			}
 		}
 
 	}
