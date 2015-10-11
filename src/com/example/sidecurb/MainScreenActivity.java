@@ -26,6 +26,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -57,6 +58,7 @@ public class MainScreenActivity extends ActionBarActivity {
     private HttpEntity json;
 	private double lon;
 	private double lat;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -66,7 +68,7 @@ public class MainScreenActivity extends ActionBarActivity {
 		mlocManager.requestLocationUpdates( LocationManager.GPS_PROVIDER, 0, 0, mlocListener);
 	 	mDrawerList = (ListView)findViewById(R.id.navList);
 	 	mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
-        mActivityTitle = getTitle().toString();
+        mActivityTitle = "Stores";
         new CallApi().execute();
         addDrawerItems();
         setupDrawer();
@@ -76,14 +78,30 @@ public class MainScreenActivity extends ActionBarActivity {
 	}
 	
 	private void addDrawerItems() {
-        String[] osArray = { "Stores", "Products", "My Cart", "My Account", "FAQ" };
-        mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, osArray);
+        String[] menuArray = { "Stores", "Categories", "My Cart", "My Account", "FAQ" };
+        mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, menuArray);
         mDrawerList.setAdapter(mAdapter);
 
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(MainScreenActivity.this, "Time for an upgrade!", Toast.LENGTH_SHORT).show();
+            	Intent intent ;
+            	if(position==0){
+            		intent = new Intent(MainScreenActivity.this, MainScreenActivity.class);
+            	}
+            	else if(position == 1){
+            		intent = new Intent(MainScreenActivity.this, CategoriesActivity.class);
+            	}
+            	else if(position == 2){
+            		intent = new Intent(MainScreenActivity.this, CartActivity.class);
+            	}
+            	else if(position == 3){
+            		intent = new Intent(MainScreenActivity.this, AccountActivity.class);
+            	}
+            	else{
+            		intent = new Intent(MainScreenActivity.this, FAQActivity.class);
+            	}
+				startActivity(intent);
             }
         });
     }
