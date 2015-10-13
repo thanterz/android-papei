@@ -44,6 +44,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -233,42 +234,22 @@ public class MainScreenActivity extends ActionBarActivity {
         ListView listView = (ListView) findViewById(R.id.shopsList);
  
         listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position,long id) {
+            	Shop entry = (Shop) parent.getItemAtPosition(position);
+                Intent intent = new Intent(MainScreenActivity.this, CategoriesActivity.class);
+                intent.putExtra("shop", entry.getShop());
+                intent.putExtra("address", entry.getAddress());
+                intent.putExtra("logo", entry.getLogo());
+                intent.putExtra("name", entry.getName());
+                Bundle extras = new Bundle();
+                intent.putExtras(extras);
+                startActivity(intent);
+            }
+        });
     }
  
     private ArrayList<Shop> generateData() throws JSONException, Throwable{
-    	/*BufferedReader rd = null;
-		try {
-			rd = new BufferedReader(new InputStreamReader(json.getContent()));
-		} catch (UnsupportedOperationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		String line = "";
-		StringBuffer jsons = new StringBuffer();
-		try {
-			while ((line = rd.readLine()) != null) {
-				jsons.append(line);
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
-		
-    	/*InputStream inputStream = null;
-    	inputStream = json.getContent();
-		BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
-	   
-	    
-	    String line = null;
-	    if(reader.ready()){
-	    	while ((line = reader.readLine()) != null)
-	    	{
-	    		sb.append(line + "\n");
-	    	}
-	    }*/
 		JSONArray shopsList =  new JSONArray(json);
 		ArrayList<Shop> shops = new ArrayList<Shop>();
 		for (int i = 0; i < shopsList.length(); i++) {
@@ -279,10 +260,11 @@ public class MainScreenActivity extends ActionBarActivity {
 	        String distance = ""+shopsList.getJSONObject(i).getString("distance")+"";
 	        distance = distance.substring(0,distance.indexOf(".")) +"m";
 	        String address = shopsList.getJSONObject(i).getString("address");
+	        String shop = shopsList.getJSONObject(i).getString("shop");
 	        if(logo.indexOf("http://www.theama.info/media/")==-1 ){
 	        	logo = "http://www.theama.info/media/"+logo;
 	        }
-	        Shop nShop = new Shop(id,name,logo, null,distance, address); 
+	        Shop nShop = new Shop(id,name,logo, null,distance, address, shop); 
 	        /*
 	        Bitmap mIcon_val = BitmapFactory.decodeStream(newurl.openConnection() .getInputStream());
 	        Shop nShop = new Shop(id,name,logo);
