@@ -187,9 +187,10 @@ public class MainScreenActivity extends ActionBarActivity {
 			}
             try {
 //            	json = response.getEntity();
+    			
             	httpEntity = response.getEntity();
                 try {
-					json = EntityUtils.toString(httpEntity);
+					json = EntityUtils.toString(httpEntity,"UTF-8");
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
