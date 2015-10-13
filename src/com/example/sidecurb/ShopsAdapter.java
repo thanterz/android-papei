@@ -39,12 +39,14 @@ public class ShopsAdapter extends ArrayAdapter<Shop> {
             View rowView = inflater.inflate(R.layout.shoprow, parent, false);
  
             // 3. Get the two text view from the rowView
-            TextView labelView = (TextView) rowView.findViewById(R.id.id);
-            TextView valueView = (TextView) rowView.findViewById(R.id.name);
+            TextView addressView = (TextView) rowView.findViewById(R.id.address);
+            TextView nameView = (TextView) rowView.findViewById(R.id.name);
+            TextView distanceView = (TextView) rowView.findViewById(R.id.distance);
             ImageView imageView  = (ImageView) rowView.findViewById(R.id.image);
             // 4. Set the text for textView 
-            labelView.setText(shopsArrayList.get(position).getId());
-            valueView.setText(shopsArrayList.get(position).getName());
+            addressView.setText(shopsArrayList.get(position).getAddress());
+            nameView.setText(shopsArrayList.get(position).getName());
+            distanceView.setText(shopsArrayList.get(position).getDistance());
             new DownloadImageTask(imageView).execute(shopsArrayList.get(position).getLogo());
             
             return rowView;

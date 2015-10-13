@@ -7,13 +7,17 @@ public class Shop {
     private String id;
     private String logo;
     private Bitmap image;
+    private String distance;
+    private String address; 
  
-    public Shop (String name, String id, String logo, Bitmap image) {
+    public Shop ( String id, String name,String logo, Bitmap image, String distance, String address) {
         super();
         this.name 	= name;
         this.id 	= id;
         this.logo	= logo;
-        this.image  = image;
+        this.image  = image;	
+		this.distance = distance;
+        this.address  = address;
     }
 
 	public CharSequence getId() {
@@ -35,6 +39,16 @@ public class Shop {
 		return this.image;
 	}
 	
+	public String getDistance() {
+		// TODO Auto-generated method stub
+		return this.distance;
+	}
+	
+	public String getAddress() {
+		// TODO Auto-generated method stub
+		return this.address;
+	}
+	
 	public void setId(String id) {
 		// TODO Auto-generated method stub
 		this.id		= id;
@@ -52,5 +66,15 @@ public class Shop {
 	
 	public void setImage(Bitmap image){
 		this.image	= image;
+	}
+	
+	public void setDistance(String distance) {
+		// TODO Auto-generated method stub
+		this.distance	= distance;
+	}
+	
+	public void setAddress(String address) {
+		// TODO Auto-generated method stub
+		this.address	= address;
 	}
 }

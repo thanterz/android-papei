@@ -19,6 +19,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.AbstractHttpEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
@@ -55,21 +56,21 @@ public class MainScreenActivity extends ActionBarActivity {
     private ArrayAdapter<String> mAdapter;
 	private ActionBarDrawerToggle mDrawerToggle;
     private String mActivityTitle;
-    private HttpEntity json;
+    private String json;
 	private double lon;
 	private double lat;
-	
+	private LocationManager mlocManager;
+	private LocationListener mlocListener;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main_screen);
-		LocationManager mlocManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-		LocationListener mlocListener = new MyLocationListener();
+		mlocManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+		mlocListener = new MyLocationListener();
 		mlocManager.requestLocationUpdates( LocationManager.GPS_PROVIDER, 0, 0, mlocListener);
 	 	mDrawerList = (ListView)findViewById(R.id.navList);
 	 	mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         mActivityTitle = "Stores";
-        new CallApi().execute();
         addDrawerItems();
         setupDrawer();
 
@@ -172,7 +173,8 @@ public class MainScreenActivity extends ActionBarActivity {
 		protected Boolean doInBackground(Void... params) {
 			// TODO: attempt authentication against a network service.
 			HttpClient httpclient = new DefaultHttpClient();
-			HttpGet httpget = new HttpGet("http://www.theama.info/curbweb/api/api/shops/?format=json");
+			HttpGet httpget = new HttpGet("http://www.theama.info/curbweb/api/api/nearby/lat/"+lat+"/lng/"+lon+"/?format=json");
+			HttpEntity httpEntity = null;
             HttpResponse response = null;
 			try {
 				response = httpclient.execute(httpget);
@@ -184,8 +186,14 @@ public class MainScreenActivity extends ActionBarActivity {
 				e1.printStackTrace();
 			}
             try {
-				//json = EntityUtils.toString(response.getEntity());
-            	json = response.getEntity();
+//            	json = response.getEntity();
+            	httpEntity = response.getEntity();
+                try {
+					json = EntityUtils.toString(httpEntity);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				return true;
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
@@ -227,7 +235,7 @@ public class MainScreenActivity extends ActionBarActivity {
     }
  
     private ArrayList<Shop> generateData() throws JSONException, Throwable{
-    	BufferedReader rd = null;
+    	/*BufferedReader rd = null;
 		try {
 			rd = new BufferedReader(new InputStreamReader(json.getContent()));
 		} catch (UnsupportedOperationException e) {
@@ -246,23 +254,40 @@ public class MainScreenActivity extends ActionBarActivity {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		JSONArray shopsList =  new JSONArray(jsons.toString());
+		}*/
+		
+    	/*InputStream inputStream = null;
+    	inputStream = json.getContent();
+		BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+	   
+	    
+	    String line = null;
+	    if(reader.ready()){
+	    	while ((line = reader.readLine()) != null)
+	    	{
+	    		sb.append(line + "\n");
+	    	}
+	    }*/
+		JSONArray shopsList =  new JSONArray(json);
 		ArrayList<Shop> shops = new ArrayList<Shop>();
 		for (int i = 0; i < shopsList.length(); i++) {
-		    JSONObject shopList = shopsList.getJSONObject(i);
-		    String id = shopList.getString("id");
-	        String name = shopList.getString("name");
-	        String logo = shopList.getString("logo");
-	        Shop nShop = new Shop(id,name,logo, null); 
+		    //JSONObject shopList = shopsList.getJSONObject(i);
+		    String id = shopsList.getJSONObject(i).getString("id");
+	        String name = shopsList.getJSONObject(i).getString("name");
+	        String logo = shopsList.getJSONObject(i).getString("logo");
+	        String distance = ""+shopsList.getJSONObject(i).getString("distance")+"";
+	        distance = distance.substring(0,distance.indexOf(".")) +"m";
+	        String address = shopsList.getJSONObject(i).getString("address");
+	        if(logo.indexOf("http://www.theama.info/media/")==-1 ){
+	        	logo = "http://www.theama.info/media/"+logo;
+	        }
+	        Shop nShop = new Shop(id,name,logo, null,distance, address); 
 	        /*
 	        Bitmap mIcon_val = BitmapFactory.decodeStream(newurl.openConnection() .getInputStream());
 	        Shop nShop = new Shop(id,name,logo);
 	        //nShop.setImage(mIcon_val);*/
 	        shops.add(nShop);
 		}
-		
- 
         return shops;
     }
     public class MyLocationListener implements LocationListener{
@@ -270,8 +295,12 @@ public class MainScreenActivity extends ActionBarActivity {
 	    @Override
 	    public void onLocationChanged(Location loc) {
     		lat 	= loc.getLatitude();
-    		lon	= loc.getLongitude();
-			Toast.makeText( getApplicationContext(),"lat="+lat+" lon="+lon,Toast.LENGTH_SHORT).show();
+    		lon		= loc.getLongitude();
+    		if(lat != 0 && lon != 0){
+    			mlocManager.removeUpdates(mlocListener);
+    			new CallApi().execute();
+    		}
+			//Toast.makeText( getApplicationContext(),"lat="+lat+" lon="+lon,Toast.LENGTH_SHORT).show();
 
 	    }
 
