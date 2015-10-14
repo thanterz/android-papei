@@ -71,10 +71,10 @@ public class CategoriesActivity extends ActionBarActivity {
         address = intent.getStringExtra("address");
         logo 	= intent.getStringExtra("logo");
         name 	= intent.getStringExtra("name");
-        TextView shopName = (TextView)findViewById(R.id.name);
+        //TextView shopName = (TextView)findViewById(R.id.name);
         TextView shopAddress = (TextView)findViewById(R.id.address);
         ImageView imageView  = (ImageView)findViewById(R.id.image);
-        shopName.setText(name);
+        //shopName.setText(name);
         shopAddress.setText(address);
         new DownloadImageTask(imageView).execute(logo);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
