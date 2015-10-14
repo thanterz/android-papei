@@ -235,17 +235,16 @@ class CallApi extends AsyncTask<Void, Void, Boolean> {
 	    ListView listView = (ListView) findViewById(R.id.categoriesList);
 	
 	    listView.setAdapter(adapter);
-	    /*listView.setOnItemClickListener(new OnItemClickListener() {
+	    listView.setOnItemClickListener(new OnItemClickListener() {
 	        public void onItemClick(AdapterView<?> parent, View view, int position,long id) {
-	        	Shop entry = (Shop) parent.getItemAtPosition(position);
+	        	Category entry = (Category) parent.getItemAtPosition(position);
 	            Intent intent = new Intent(CategoriesActivity.this, CategoriesActivity.class);
-	            intent.putExtra("id", entry.getId());
-	            intent.putExtra("address", entry.getAddress());
+	            intent.putExtra("url", entry.getUrl());
 	            Bundle extras = new Bundle();
 	            intent.putExtras(extras);
 	            startActivity(intent);
 	        }
-	    });*/
+	    });
 	}
 	
 	private ArrayList<Category> generateData() throws JSONException, Throwable{
