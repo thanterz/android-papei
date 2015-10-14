@@ -43,7 +43,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
-public class CategoriesActivity extends ActionBarActivity {
+public class ProductsActivity extends ActionBarActivity {
 
 	private ListView mDrawerList;
     private DrawerLayout mDrawerLayout;
@@ -51,32 +51,22 @@ public class CategoriesActivity extends ActionBarActivity {
 	private ActionBarDrawerToggle mDrawerToggle;
     private String mActivityTitle;
     private String json;
-	private String shop;
-	private String address;
-	private String logo;
-	private String name;
+	private String url;
 	private Intent intent;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_categories);
+		setContentView(R.layout.activity_products);
 	 	mDrawerList = (ListView)findViewById(R.id.navList);
 	 	mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
-        mActivityTitle = "Categories";
-        //new CallApi().execute();
+        mActivityTitle = "Products";
         addDrawerItems();
         setupDrawer();
         intent = getIntent();
-        shop = intent.getStringExtra("shop");
-        address = intent.getStringExtra("address");
-        logo 	= intent.getStringExtra("logo");
-        name 	= intent.getStringExtra("name");
+        url = intent.getStringExtra("shop");
+        new CallApi().execute();
         //TextView shopName = (TextView)findViewById(R.id.name);
-        TextView shopAddress = (TextView)findViewById(R.id.address);
-        ImageView imageView  = (ImageView)findViewById(R.id.image);
         //shopName.setText(name);
-        shopAddress.setText(address);
-        new DownloadImageTask(imageView).execute(logo);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 	}
@@ -91,19 +81,19 @@ public class CategoriesActivity extends ActionBarActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             	Intent intent ;
             	if(position==0){
-            		intent = new Intent(CategoriesActivity.this, MainScreenActivity.class);
+            		intent = new Intent(ProductsActivity.this, MainScreenActivity.class);
             	}
             	else if(position == 1){
-            		intent = new Intent(CategoriesActivity.this, CategoriesActivity.class);
+            		intent = new Intent(ProductsActivity.this, CategoriesActivity.class);
             	}
             	else if(position == 2){
-            		intent = new Intent(CategoriesActivity.this, CartActivity.class);
+            		intent = new Intent(ProductsActivity.this, CartActivity.class);
             	}
             	else if(position == 3){
-            		intent = new Intent(CategoriesActivity.this, AccountActivity.class);
+            		intent = new Intent(ProductsActivity.this, AccountActivity.class);
             	}
             	else{
-            		intent = new Intent(CategoriesActivity.this, FAQActivity.class);
+            		intent = new Intent(ProductsActivity.this, FAQActivity.class);
             	}
 				startActivity(intent);
             }
@@ -111,11 +101,11 @@ public class CategoriesActivity extends ActionBarActivity {
     }
 	
 	private void setupDrawer() {
-			mDrawerToggle = new ActionBarDrawerToggle(CategoriesActivity.this, mDrawerLayout,  R.string.drawer_open, R.string.drawer_close ) {
+			mDrawerToggle = new ActionBarDrawerToggle(ProductsActivity.this, mDrawerLayout,  R.string.drawer_open, R.string.drawer_close ) {
 
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                getSupportActionBar().setTitle("Navigation!");
+                getSupportActionBar().setTitle("Products!");
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
 
@@ -146,7 +136,7 @@ public class CategoriesActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.categories, menu);
+        getMenuInflater().inflate(R.menu.products, menu);
         return true;
     }
 
@@ -176,7 +166,7 @@ class CallApi extends AsyncTask<Void, Void, Boolean> {
 		protected Boolean doInBackground(Void... params) {
 			// TODO: attempt authentication against a network service.
 			HttpClient httpclient = new DefaultHttpClient();
-			HttpGet httpget = new HttpGet(shop+"categories/?format=json");
+			HttpGet httpget = new HttpGet(url+"/?format=json");
 			HttpEntity httpEntity = null;
             HttpResponse response = null;
 			try {
@@ -212,7 +202,7 @@ class CallApi extends AsyncTask<Void, Void, Boolean> {
 		protected void onPostExecute(final Boolean success) {
 			if(success.equals(true)){
 				try {
-					createCategoriesList();
+					createProductsList();
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -220,75 +210,54 @@ class CallApi extends AsyncTask<Void, Void, Boolean> {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				Toast.makeText(getApplicationContext(), "Shops are ok", Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplicationContext(), "Products are ok", Toast.LENGTH_SHORT).show();
             }
 			else{
-				Toast.makeText(getApplicationContext(), "Login error.Try again!", Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplicationContext(), "products not ok!", Toast.LENGTH_SHORT).show();
 			}
 		}
 
 	}
 	
-	private void createCategoriesList () throws Throwable{
-		CategoryAdapter adapter = new CategoryAdapter(this, generateData());
+	private void createProductsList () throws Throwable{
+		ProductAdapter adapter = new ProductAdapter(this, generateData());
 		 
-	    ListView listView = (ListView) findViewById(R.id.categoriesList);
+	    ListView listView = (ListView) findViewById(R.id.productsList);
 	
 	    listView.setAdapter(adapter);
-	    listView.setOnItemClickListener(new OnItemClickListener() {
+	    /*listView.setOnItemClickListener(new OnItemClickListener() {
 	        public void onItemClick(AdapterView<?> parent, View view, int position,long id) {
 	        	Category entry = (Category) parent.getItemAtPosition(position);
-	            Intent intent = new Intent(CategoriesActivity.this, ProductsActivity.class);
-	            Integer catid = Integer.parseInt((String) entry.getId()) + 1;
-	            intent.putExtra("shop", shop+"categories/"+catid);
+	            Intent intent = new Intent(CategoriesActivity.this, CategoriesActivity.class);
+	            intent.putExtra("url", entry.getUrl());
 	            Bundle extras = new Bundle();
 	            intent.putExtras(extras);
 	            startActivity(intent);
 	        }
-	    });
+	    });*/
 	}
 	
-	private ArrayList<Category> generateData() throws JSONException, Throwable{
+	private ArrayList<Product> generateData() throws JSONException, Throwable{
 		
-		JSONArray categoriesList =  new JSONArray(json);
+		JSONArray productsList =  new JSONArray(json);
 		
-		ArrayList<Category> categories = new ArrayList<Category>();
+		ArrayList<Product> products = new ArrayList<Product>();
 		
-		for (int i = 0; i < categoriesList.length(); i++) {
+		for (int i = 0; i < productsList.length(); i++) {
 		    //JSONObject shopList = shopsList.getJSONObject(i);
-		    String id = categoriesList.getJSONObject(i).getString("parent_cat_id");
-	        String name = categoriesList.getJSONObject(i).getString("name");
-	        String url = categoriesList.getJSONObject(i).getString("url");
+		    String id = String.valueOf(i);// productsList.getJSONObject(i).getString("id");
+		    String sku = productsList.getJSONObject(i).getString("sku");
+	        String name = productsList.getJSONObject(i).getString("name");
+	        String url = productsList.getJSONObject(i).getString("url");
+	        String price = productsList.getJSONObject(i).getString("price");
+	        String description = productsList.getJSONObject(i).getString("description");
+		    String photo = productsList.getJSONObject(i).getString("photo");
+	        String categ = productsList.getJSONObject(i).getString("categ");
+	        String sid = productsList.getJSONObject(i).getString("sid");
 	        
-	        Category cat = new Category(id,name,url); 
-	        categories.add(cat);
+	       Product prod = new Product(id,sku,name,url,price,description,photo,categ,sid); 
+	        products.add(prod);
 		}
-	    return categories;
+	    return products;
 	}
-	
-	 private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-     	  ImageView bmImage;
-
-     	  public DownloadImageTask(ImageView bmImage) {
-     	      this.bmImage = bmImage;
-     	  }
-
-     	  protected Bitmap doInBackground(String... urls) {
-     	      String urldisplay = urls[0];
-     	      Bitmap mIcon11 = null;
-     	      try {
-     	        InputStream in = new java.net.URL(urldisplay).openStream();
-     	        mIcon11 = BitmapFactory.decodeStream(in);
-     	      } catch (Exception e) {
-     	          Log.e("Error", e.getMessage());
-     	          e.printStackTrace();
-     	      }
-     	      return mIcon11;
-     	  }
-
-     	  protected void onPostExecute(Bitmap result) {
-     		  bmImage.setImageBitmap(result);
-     		  new CallApi().execute();
-     	  }
-     	}
 }
