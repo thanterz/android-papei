@@ -1,6 +1,19 @@
 package com.example.sidecurb;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.ParseException;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import com.example.sidecurb.MainScreenActivity.CallApi;
 import com.example.sidecurb.MainScreenActivity.MyLocationListener;
@@ -9,18 +22,26 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
 
 public class CategoriesActivity extends ActionBarActivity {
 
@@ -29,8 +50,12 @@ public class CategoriesActivity extends ActionBarActivity {
     private ArrayAdapter<String> mAdapter;
 	private ActionBarDrawerToggle mDrawerToggle;
     private String mActivityTitle;
-    private HttpEntity json;
-	
+    private String json;
+	private String shop;
+	private String address;
+	private String logo;
+	private String name;
+	private Intent intent;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -41,7 +66,17 @@ public class CategoriesActivity extends ActionBarActivity {
         //new CallApi().execute();
         addDrawerItems();
         setupDrawer();
-
+        intent = getIntent();
+        shop = intent.getStringExtra("shop");
+        address = intent.getStringExtra("address");
+        logo 	= intent.getStringExtra("logo");
+        name 	= intent.getStringExtra("name");
+        //TextView shopName = (TextView)findViewById(R.id.name);
+        TextView shopAddress = (TextView)findViewById(R.id.address);
+        ImageView imageView  = (ImageView)findViewById(R.id.image);
+        //shopName.setText(name);
+        shopAddress.setText(address);
+        new DownloadImageTask(imageView).execute(logo);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 	}
@@ -134,4 +169,126 @@ public class CategoriesActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+    
+class CallApi extends AsyncTask<Void, Void, Boolean> {
+		
+		@Override
+		protected Boolean doInBackground(Void... params) {
+			// TODO: attempt authentication against a network service.
+			HttpClient httpclient = new DefaultHttpClient();
+			HttpGet httpget = new HttpGet(shop+"categories/?format=json");
+			HttpEntity httpEntity = null;
+            HttpResponse response = null;
+			try {
+				response = httpclient.execute(httpget);
+			} catch (ClientProtocolException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+            try {
+    			
+            	httpEntity = response.getEntity();
+                try {
+					json = EntityUtils.toString(httpEntity,"UTF-8");
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				return true;
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+            
+            return null;
+
+		}
+		
+
+		@Override
+		protected void onPostExecute(final Boolean success) {
+			if(success.equals(true)){
+				try {
+					createCategoriesList();
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (Throwable e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				Toast.makeText(getApplicationContext(), "Shops are ok", Toast.LENGTH_SHORT).show();
+            }
+			else{
+				Toast.makeText(getApplicationContext(), "Login error.Try again!", Toast.LENGTH_SHORT).show();
+			}
+		}
+
+	}
+	
+	private void createCategoriesList () throws Throwable{
+		CategoryAdapter adapter = new CategoryAdapter(this, generateData());
+		 
+	    ListView listView = (ListView) findViewById(R.id.categoriesList);
+	
+	    listView.setAdapter(adapter);
+	    listView.setOnItemClickListener(new OnItemClickListener() {
+	        public void onItemClick(AdapterView<?> parent, View view, int position,long id) {
+	        	Category entry = (Category) parent.getItemAtPosition(position);
+	            Intent intent = new Intent(CategoriesActivity.this, ProductsActivity.class);
+	            Integer catid = Integer.parseInt((String) entry.getId()) + 1;
+	            intent.putExtra("shop", shop+"categories/"+catid);
+	            Bundle extras = new Bundle();
+	            intent.putExtras(extras);
+	            startActivity(intent);
+	        }
+	    });
+	}
+	
+	private ArrayList<Category> generateData() throws JSONException, Throwable{
+		
+		JSONArray categoriesList =  new JSONArray(json);
+		
+		ArrayList<Category> categories = new ArrayList<Category>();
+		
+		for (int i = 0; i < categoriesList.length(); i++) {
+		    //JSONObject shopList = shopsList.getJSONObject(i);
+		    String id = categoriesList.getJSONObject(i).getString("parent_cat_id");
+	        String name = categoriesList.getJSONObject(i).getString("name");
+	        String url = categoriesList.getJSONObject(i).getString("url");
+	        
+	        Category cat = new Category(id,name,url); 
+	        categories.add(cat);
+		}
+	    return categories;
+	}
+	
+	 private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+     	  ImageView bmImage;
+
+     	  public DownloadImageTask(ImageView bmImage) {
+     	      this.bmImage = bmImage;
+     	  }
+
+     	  protected Bitmap doInBackground(String... urls) {
+     	      String urldisplay = urls[0];
+     	      Bitmap mIcon11 = null;
+     	      try {
+     	        InputStream in = new java.net.URL(urldisplay).openStream();
+     	        mIcon11 = BitmapFactory.decodeStream(in);
+     	      } catch (Exception e) {
+     	          Log.e("Error", e.getMessage());
+     	          e.printStackTrace();
+     	      }
+     	      return mIcon11;
+     	  }
+
+     	  protected void onPostExecute(Bitmap result) {
+     		  bmImage.setImageBitmap(result);
+     		  new CallApi().execute();
+     	  }
+     	}
 }
