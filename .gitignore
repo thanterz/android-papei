@@ -1,6 +1,6 @@
 bin/
 libs/
 mylibs/
-.classpath
-.gitginore
+/.classpath
+/.gitignore
 project.properties
