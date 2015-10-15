@@ -42,11 +42,13 @@ public class ShopsAdapter extends ArrayAdapter<Shop> {
             TextView addressView = (TextView) rowView.findViewById(R.id.address);
             TextView nameView = (TextView) rowView.findViewById(R.id.name);
             TextView distanceView = (TextView) rowView.findViewById(R.id.distance);
+            TextView timeView = (TextView) rowView.findViewById(R.id.time);
             ImageView imageView  = (ImageView) rowView.findViewById(R.id.image);
             // 4. Set the text for textView 
             addressView.setText(shopsArrayList.get(position).getAddress());
             nameView.setText(shopsArrayList.get(position).getName());
             distanceView.setText(shopsArrayList.get(position).getDistance());
+            timeView.setText("Ready in 2 hours!");
             new DownloadImageTask(imageView).execute(shopsArrayList.get(position).getLogo());
             
             return rowView;
