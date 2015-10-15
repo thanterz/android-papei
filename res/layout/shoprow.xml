@@ -17,7 +17,7 @@
     android:layout_height="250px">	
      	<LinearLayout
 		    android:layout_width="fill_parent"
-		    android:layout_height="120px">
+		    android:layout_height="250px">
 	     <TextView
 	        android:id="@+id/name"
 	        android:layout_width="wrap_content"
