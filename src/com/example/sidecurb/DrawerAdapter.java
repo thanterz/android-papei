@@ -37,7 +37,16 @@ public class DrawerAdapter extends ArrayAdapter<String> {
             TextView drawerAction = (TextView) rowView.findViewById(R.id.name);
             drawerAction.setText(DrawerArrayList[position]);
             ImageView iconDrawer = (ImageView) rowView.findViewById(R.id.imageIcon);
-            iconDrawer.setImageResource(R.drawable.redicon);
+            if(position == 0)
+            	iconDrawer.setImageResource(R.drawable.store);
+            else if (position == 1)
+            	iconDrawer.setImageResource(R.drawable.redicon);
+            else if (position == 2)
+            	iconDrawer.setImageResource(R.drawable.fullcart);	
+            else if (position == 3)
+            	iconDrawer.setImageResource(R.drawable.kalathi);
+            else if (position == 4)
+            	iconDrawer.setImageResource(R.drawable.redicon);
             
             return rowView;
         }

@@ -70,7 +70,7 @@
                 android:layout_height="28dp"
                 android:layout_gravity="start|left|fill_vertical"
                 android:scaleType="fitStart"
-                android:src="@drawable/redicon" />
+                android:src="@drawable/clock" />
 
             <TextView
                 android:id="@+id/time"
