@@ -12,6 +12,7 @@
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
         android:paddingTop="10dp"
+        android:layout_gravity="center_vertical"
         android:paddingBottom="10dp"/>
     
      	<LinearLayout
