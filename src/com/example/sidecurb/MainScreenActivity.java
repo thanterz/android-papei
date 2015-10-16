@@ -48,6 +48,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 public class MainScreenActivity extends ActionBarActivity {
@@ -62,10 +63,13 @@ public class MainScreenActivity extends ActionBarActivity {
 	private double lat;
 	private LocationManager mlocManager;
 	private LocationListener mlocListener;
+	private ProgressBar spinner;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main_screen);
+		spinner = (ProgressBar)findViewById(R.id.progress);
+		spinner.setVisibility(View.VISIBLE);	
 		mlocManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 		mlocListener = new MyLocationListener();
 		mlocManager.requestLocationUpdates( LocationManager.GPS_PROVIDER, 0, 0, mlocListener);
@@ -220,7 +224,7 @@ public class MainScreenActivity extends ActionBarActivity {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				Toast.makeText(getApplicationContext(), "Shops are ok", Toast.LENGTH_SHORT).show();
+				spinner.setVisibility(View.GONE);
             }
 			else{
 				Toast.makeText(getApplicationContext(), "Login error.Try again!", Toast.LENGTH_SHORT).show();
