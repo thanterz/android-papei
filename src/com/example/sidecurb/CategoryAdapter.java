@@ -30,7 +30,7 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
  
             // 2. Get rowView from inflater
-            View rowView = inflater.inflate(R.layout.shoprow, parent, false);
+            View rowView = inflater.inflate(R.layout.categoryrow, parent, false);
  
             // 3. Get the two text view from the rowView
             TextView category = (TextView) rowView.findViewById(R.id.name);
