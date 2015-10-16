@@ -39,6 +39,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
@@ -55,11 +56,14 @@ public class CategoriesActivity extends ActionBarActivity {
 	private String address;
 	private String logo;
 	private String name;
+	private ProgressBar spinner;
 	private Intent intent;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_categories);
+		spinner = (ProgressBar)findViewById(R.id.progress);
+		spinner.setVisibility(View.VISIBLE);	
 	 	mDrawerList = (ListView)findViewById(R.id.navList);
 	 	mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         mActivityTitle = "Categories";
@@ -220,7 +224,7 @@ class CallApi extends AsyncTask<Void, Void, Boolean> {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				Toast.makeText(getApplicationContext(), "Shops are ok", Toast.LENGTH_SHORT).show();
+				spinner.setVisibility(View.GONE);
             }
 			else{
 				Toast.makeText(getApplicationContext(), "Login error.Try again!", Toast.LENGTH_SHORT).show();

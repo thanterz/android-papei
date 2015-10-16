@@ -39,6 +39,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
@@ -53,10 +54,13 @@ public class ProductsActivity extends ActionBarActivity {
     private String json;
 	private String url;
 	private Intent intent;
+	private ProgressBar spinner;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_products);
+		spinner = (ProgressBar)findViewById(R.id.progress);
+		spinner.setVisibility(View.VISIBLE);	
 	 	mDrawerList = (ListView)findViewById(R.id.navList);
 	 	mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         mActivityTitle = "Products";
@@ -210,7 +214,7 @@ class CallApi extends AsyncTask<Void, Void, Boolean> {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				Toast.makeText(getApplicationContext(), "Products are ok", Toast.LENGTH_SHORT).show();
+				spinner.setVisibility(View.GONE);
             }
 			else{
 				Toast.makeText(getApplicationContext(), "products not ok!", Toast.LENGTH_SHORT).show();
