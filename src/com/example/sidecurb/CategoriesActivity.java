@@ -47,7 +47,7 @@ public class CategoriesActivity extends ActionBarActivity {
 
 	private ListView mDrawerList;
     private DrawerLayout mDrawerLayout;
-    private ArrayAdapter<String> mAdapter;
+    private DrawerAdapter mAdapter;
 	private ActionBarDrawerToggle mDrawerToggle;
     private String mActivityTitle;
     private String json;
@@ -83,7 +83,7 @@ public class CategoriesActivity extends ActionBarActivity {
 	
 	private void addDrawerItems() {
         String[] menuArray = { "Stores", "Categories", "My Cart", "My Account", "FAQ" };
-        mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, menuArray);
+        mAdapter = new DrawerAdapter(this, menuArray);
         mDrawerList.setAdapter(mAdapter);
 
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
