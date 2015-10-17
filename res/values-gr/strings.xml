@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">sidecurb</string>
+    <string name="hello_world">Γεια σου κόσμε</string>
+    <string name="action_settings">Ρυθμίσεις</string>
+    <string name="register">Εγγραφή</string>
+    <string name="ask_login">Έχετε ήδη λογαριασμό;</string>
+    <string name="signin">Συνδεθείτε</string>
+    <string name="title_activity_register">Εγγραφή</string>
+    <string name="email">Ηλ. Λογαριασμός</string>
+    <string name="emailinput">Ηλ. Λογαριασμός</string>
+    <string name="password">Κωδικός</string>
+    <string name="namelabel">Όνομα</string>
+    <string name="nameinput">Όνομα</string>
+    <string name="surnamelabel">Επίθετο</string>
+    <string name="surnameinput">Επίθετο</string>
+    <string name="tel">Τηλέφωνο</string>
+    <string name="telinput">Τηλέφωνο</string> 
+    <string name="card">Κάρτα</string>
+    <string name="cardinput">Κάρτα</string>
+    <string name="user">Χρήστης</string>
+    <string name="userinput">Χρήστης</string>
+    <string name="passwordinput">Κωδικός</string>
+    <string name="loginbtn">Σύνδεση</string>
+    <string name="title_activity_login_activity2">΄Σύνδεση</string>
+    <string name="title_activity_test">TestActivity</string>
+    <string name="title_activity_main_screen">Καταστήματα</string>
+    <string name="title_section1">Μέρος 1</string>
+    <string name="title_section2">Μέρος 2</string>
+    <string name="title_section3">Μέρος 3</string>
+    <string name="navigation_drawer_open">Ανοίξτε το συρτάρι!</string>
+    <string name="navigation_drawer_close">Κλείστε το συρτάρι</string>
+    <string name="action_example">Example action</string>
+    <string name="drawer_open">Ανοίξτε το συρτάρι!</string>
+    <string name="drawer_close">Κλείστε το συρτάρι!</string>
+    <string name="title_activity_categories">Κατηγορίες</string>
+    <string name="title_activity_cart">Καλάθι</string>
+    <string name="title_activity_account">Λογαριασμός</string>
+    <string name="title_activity_faq">FAQ</string>
+    <string name="title_activity_products">Προϊόντα</string>
+    <string name="title_activity_product_page">Λεπτομέρειες</string>
+
+</resources>
