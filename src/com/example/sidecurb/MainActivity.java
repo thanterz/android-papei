@@ -29,6 +29,21 @@ public class MainActivity extends ActionBarActivity {
 				startActivity(intent);
 			}
 		});
+        
+        TextView t2;
+        t2 = (TextView)findViewById(R.id.registerbtn);
+        
+        t2.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				//Intent intent = new Intent(MainActivity.this, LoginActivity2.class);
+				Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
+				startActivity(intent);
+			}
+		});
+        
     }
 
     @Override
