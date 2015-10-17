@@ -259,7 +259,8 @@ class CallApi extends AsyncTask<Void, Void, Boolean> {
 	    ListView listView = (ListView) findViewById(R.id.categoriesList);
 	
 	    listView.setAdapter(adapter);
-	    setListViewHeightBasedOnChildren(listView);
+	    
+	    setListViewHeightBasedOnChildren(adapter, listView);
 	    listView.setOnItemClickListener(new OnItemClickListener() {
 	        public void onItemClick(AdapterView<?> parent, View view, int position,long id) {
 	        	Category entry = (Category) parent.getItemAtPosition(position);
@@ -316,9 +317,9 @@ class CallApi extends AsyncTask<Void, Void, Boolean> {
      		  new CallApi().execute();
      	  }
      	}
-	  public static void setListViewHeightBasedOnChildren(ListView listView) 
+	  public static void setListViewHeightBasedOnChildren(CategoryAdapter adapter, ListView listView) 
 	  {
-	      ListAdapter listAdapter = listView.getAdapter();
+		  CategoryAdapter listAdapter = adapter;
 	      if (listAdapter == null)
 	          return;
 
@@ -335,7 +336,7 @@ class CallApi extends AsyncTask<Void, Void, Boolean> {
 	                                        LayoutParams.WRAP_CONTENT));
 
 	          view.measure(desiredWidth, MeasureSpec.UNSPECIFIED);
-	          totalHeight += view.getMeasuredHeight();
+	          totalHeight += view.getMinimumHeight();
 
 	      }
 

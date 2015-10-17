@@ -27,8 +27,7 @@ public class DrawerAdapter extends ArrayAdapter<String> {
         public View getView(int position, View convertView, ViewGroup parent) {
  
             // 1. Create inflater 
-            LayoutInflater inflater = (LayoutInflater) context
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
  
             // 2. Get rowView from inflater
             View rowView = inflater.inflate(R.layout.drawerrow, parent, false);
