@@ -45,6 +45,8 @@ public class MainScreenActivity extends ActionBarActivity {
 	private LocationManager mlocManager;
 	private LocationListener mlocListener;
 	private ProgressBar spinner;
+	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -67,11 +69,11 @@ public class MainScreenActivity extends ActionBarActivity {
 	
 	private void addDrawerItems() {
         String[] menuArray = { "Stores", "Categories", "My Cart", "My Account", "FAQ" };
-        mAdapter = new DrawerAdapter(this, menuArray);
+        mAdapter = new DrawerAdapter(MainScreenActivity.this, menuArray);
         mDrawerList.setAdapter(mAdapter);
 
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
+
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             	Intent intent ;
             	if(position==0){
