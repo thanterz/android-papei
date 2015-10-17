@@ -247,6 +247,8 @@ public class MainScreenActivity extends ActionBarActivity {
                 intent.putExtra("address", entry.getAddress());
                 intent.putExtra("logo", entry.getLogo());
                 intent.putExtra("name", entry.getName());
+                intent.putExtra("lat", entry.getLat());
+                intent.putExtra("lon", entry.getLon());
                 Bundle extras = new Bundle();
                 intent.putExtras(extras);
                 startActivity(intent);
@@ -266,10 +268,12 @@ public class MainScreenActivity extends ActionBarActivity {
 	        distance = distance.substring(0,distance.indexOf(".")) +"m";
 	        String address = shopsList.getJSONObject(i).getString("address");
 	        String shop = shopsList.getJSONObject(i).getString("shop");
+	        String lat = shopsList.getJSONObject(i).getString("lat");
+	        String lon = shopsList.getJSONObject(i).getString("lon");
 	        if(logo.indexOf("http://www.theama.info/media/")==-1 ){
 	        	logo = "http://www.theama.info/media/"+logo;
 	        }
-	        Shop nShop = new Shop(id,name,logo, null,distance, address, shop); 
+	        Shop nShop = new Shop(id,name,logo, null,distance, address, shop,lat,lon); 
 	        /*
 	        Bitmap mIcon_val = BitmapFactory.decodeStream(newurl.openConnection() .getInputStream());
 	        Shop nShop = new Shop(id,name,logo);

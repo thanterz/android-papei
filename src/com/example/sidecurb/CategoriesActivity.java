@@ -26,6 +26,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -35,6 +36,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -56,6 +58,8 @@ public class CategoriesActivity extends ActionBarActivity {
 	private String address;
 	private String logo;
 	private String name;
+	private String lat;
+	private String lon;
 	private ProgressBar spinner;
 	private Intent intent;
 	@Override
@@ -75,9 +79,21 @@ public class CategoriesActivity extends ActionBarActivity {
         address = intent.getStringExtra("address");
         logo 	= intent.getStringExtra("logo");
         name 	= intent.getStringExtra("name");
+        lat 	= intent.getStringExtra("lat");
+        lon 	= intent.getStringExtra("lon");
         //TextView shopName = (TextView)findViewById(R.id.name);
         TextView shopAddress = (TextView)findViewById(R.id.address);
         ImageView imageView  = (ImageView)findViewById(R.id.image);
+        imageView.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent(android.content.Intent.ACTION_VIEW, 
+				Uri.parse("http://maps.google.com/maps?daddr="+lat+","+lon));
+				startActivity(intent);
+			}
+		});
         //shopName.setText(name);
         shopAddress.setText(address);
         new DownloadImageTask(imageView).execute(logo);

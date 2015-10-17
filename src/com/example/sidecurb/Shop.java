@@ -10,8 +10,10 @@ public class Shop {
     private String distance;
     private String address; 
     private String shop;
+    private String lat;
+    private String lon;
  
-    public Shop ( String id, String name,String logo, Bitmap image, String distance, String address, String shop) {
+    public Shop ( String id, String name,String logo, Bitmap image, String distance, String address, String shop,String lat, String lon) {
         super();
         this.name 	= name;
         this.id 	= id;
@@ -20,6 +22,8 @@ public class Shop {
 		this.distance = distance;
         this.address  = address;
         this.shop	= shop;
+        this.lat = lat;
+        this.lon = lon;
     }
 
 	public CharSequence getId() {
@@ -49,6 +53,16 @@ public class Shop {
 	public String getAddress() {
 		// TODO Auto-generated method stub
 		return this.address;
+	}
+	
+	public String getLat() {
+		// TODO Auto-generated method stub
+		return this.lat;
+	}
+	
+	public String getLon() {
+		// TODO Auto-generated method stub
+		return this.lon;
 	}
 	
 	public String getShop() {
@@ -88,5 +102,15 @@ public class Shop {
 	public void setShop(String shop) {
 		// TODO Auto-generated method stub
 		this.shop	= shop;
+	}
+	
+	public void getLat(String lat) {
+		// TODO Auto-generated method stub
+		 this.lat = lat;
+	}
+	
+	public void getLon(String lon) {
+		// TODO Auto-generated method stub
+		this.lon = lon;
 	}
 }
