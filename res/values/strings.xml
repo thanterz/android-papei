@@ -10,6 +10,17 @@
     <string name="title_activity_register">RegisterActivity</string>
     <string name="email">Email</string>
     <string name="emailinput">Email</string>
+    <string name="password">Password</string>
+    <string name="namelabel">Name</string>
+    <string name="nameinput">Name</string>
+    <string name="surnamelabel">Surname</string>
+    <string name="surnameinput">Surname</string>
+    <string name="tel">Telephone</string>
+    <string name="telinput">Telephone</string> 
+    <string name="card">Card</string>
+    <string name="cardinput">Card</string>
+    <string name="user">User</string>
+    <string name="userinput">User</string>
     <string name="passwordinput">Password</string>
     <string name="loginbtn">Login</string>
     <string name="title_activity_login_activity2">LoginActivity2</string>
