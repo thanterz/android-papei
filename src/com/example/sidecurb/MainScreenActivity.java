@@ -49,17 +49,17 @@ public class MainScreenActivity extends ActionBarActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main_screen);
-	 	mDrawerList = (ListView)findViewById(R.id.navList);
-	 	mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
-        mActivityTitle = "Stores";
-        addDrawerItems();
-        setupDrawer();
 		spinner = (ProgressBar)findViewById(R.id.progress);
 		spinner.setVisibility(View.VISIBLE);	
 		mlocManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 		mlocListener = new MyLocationListener();
 		mlocManager.requestLocationUpdates( LocationManager.GPS_PROVIDER, 0, 0, mlocListener);
 		mlocManager.requestLocationUpdates( LocationManager.NETWORK_PROVIDER, 0, 0, mlocListener);
+	 	mDrawerList = (ListView)findViewById(R.id.navList);
+	 	mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        mActivityTitle = "Stores";
+        addDrawerItems();
+        setupDrawer();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -69,10 +69,10 @@ public class MainScreenActivity extends ActionBarActivity {
         String[] menuArray = { "Stores", "Categories", "My Cart", "My Account", "FAQ" };
         mAdapter = new DrawerAdapter(this, menuArray);
         mDrawerList.setAdapter(mAdapter);
-
+        
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        	@Override
+        	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             	Intent intent ;
             	if(position==0){
             		intent = new Intent(MainScreenActivity.this, MainScreenActivity.class);
@@ -230,6 +230,7 @@ public class MainScreenActivity extends ActionBarActivity {
                 intent.putExtra("name", entry.getName());
                 intent.putExtra("lat", entry.getLat());
                 intent.putExtra("lon", entry.getLon());
+                intent.putExtra("distance", entry.getDistance());
                 Bundle extras = new Bundle();
                 intent.putExtras(extras);
                 startActivity(intent);

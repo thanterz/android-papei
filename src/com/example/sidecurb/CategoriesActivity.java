@@ -18,6 +18,7 @@ import org.json.JSONException;
 import com.example.sidecurb.MainScreenActivity.CallApi;
 import com.example.sidecurb.MainScreenActivity.MyLocationListener;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -50,7 +51,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
-public class CategoriesActivity extends ActionBarActivity {
+@SuppressLint("NewApi") public class CategoriesActivity extends ActionBarActivity {
 
 	private ListView mDrawerList;
     private DrawerLayout mDrawerLayout;
@@ -64,6 +65,7 @@ public class CategoriesActivity extends ActionBarActivity {
 	private String name;
 	private String lat;
 	private String lon;
+	private String distance;
 	private ProgressBar spinner;
 	private Intent intent;
 	@Override
@@ -85,9 +87,12 @@ public class CategoriesActivity extends ActionBarActivity {
         name 	= intent.getStringExtra("name");
         lat 	= intent.getStringExtra("lat");
         lon 	= intent.getStringExtra("lon");
-        //TextView shopName = (TextView)findViewById(R.id.name);
+        distance = intent.getStringExtra("distance");
+        TextView shopName = (TextView)findViewById(R.id.name);
         TextView shopAddress = (TextView)findViewById(R.id.address);
         ImageView imageView  = (ImageView)findViewById(R.id.image);
+        TextView distView = (TextView)findViewById(R.id.distance);
+        TextView timeView = (TextView) findViewById(R.id.time);
         imageView.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -98,8 +103,20 @@ public class CategoriesActivity extends ActionBarActivity {
 				startActivity(intent);
 			}
 		});
-        //shopName.setText(name);
+        ImageView mapiconView = (ImageView) findViewById(R.id.mapicon);
+		mapiconView.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						// TODO Auto-generated method stub
+						Intent intent = new Intent(android.content.Intent.ACTION_VIEW, 
+						Uri.parse("http://maps.google.com/maps?daddr="+lat+","+lon));
+						startActivity(intent);
+					}
+		});
+        shopName.setText(name);
         shopAddress.setText(address);
+        distView.setText(distance);
+        timeView.setText("Ready in 2 hours!");
         new DownloadImageTask(imageView).execute(logo);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
