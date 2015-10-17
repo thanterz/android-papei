@@ -42,6 +42,7 @@
     		        android:layout_height="wrap_content"
     		        android:layout_centerVertical="true"
     		        android:layout_gravity="left"
+    		        android:layout_weight="52.41"
     		        android:paddingBottom="7dp"
     		        android:paddingLeft="4dp"
     		        android:paddingTop="7dp"
@@ -49,16 +50,16 @@
     		        android:textSize="18sp" />
 
 	           <ImageView
-			       android:id="@+id/cart"
-			       android:layout_width="wrap_content"
-			       android:layout_height="wrap_content"
-			       android:layout_gravity="right"
-			        android:paddingRight="4dp"
-			       android:layout_weight="0.6"
-			       android:paddingTop="7dp"
-			       android:paddingBottom="7dp"
-			       android:src="@drawable/kalathi" 
-			       />
+	               android:id="@+id/cart"
+	               android:layout_width="wrap_content"
+	               android:layout_height="wrap_content"
+	               android:layout_gravity="end|right"
+	               android:layout_weight="1"
+	               android:paddingBottom="7dp"
+	               android:paddingRight="4dp"
+	               android:paddingTop="7dp"
+	               android:src="@drawable/kalathi" />
+
         	</LinearLayout>
 
 		</LinearLayout>
