@@ -28,5 +28,6 @@
     <string name="title_activity_account">AccountActivity</string>
     <string name="title_activity_faq">FAQActivity</string>
     <string name="title_activity_products">ProductsActivity</string>
+    <string name="title_activity_product_page">ProductPageActivity</string>
 
 </resources>

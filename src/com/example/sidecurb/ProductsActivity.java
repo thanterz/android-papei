@@ -229,16 +229,23 @@ class CallApi extends AsyncTask<Void, Void, Boolean> {
 	    ListView listView = (ListView) findViewById(R.id.productsList);
 	
 	    listView.setAdapter(adapter);
-	    /*listView.setOnItemClickListener(new OnItemClickListener() {
+	    listView.setOnItemClickListener(new OnItemClickListener() {
 	        public void onItemClick(AdapterView<?> parent, View view, int position,long id) {
-	        	Category entry = (Category) parent.getItemAtPosition(position);
-	            Intent intent = new Intent(CategoriesActivity.this, CategoriesActivity.class);
+	        	Product entry = (Product) parent.getItemAtPosition(position);
+	            Intent intent = new Intent(ProductsActivity.this, ProductPageActivity.class);
+	            //intent.putExtra("url", entry.getUrl());
+	            intent.putExtra("sku", entry.getSku());
+	            intent.putExtra("name", entry.getName());
 	            intent.putExtra("url", entry.getUrl());
+	            intent.putExtra("price", entry.getPrice());
+	            intent.putExtra("description", entry.getDescription());
+	            intent.putExtra("photo", entry.getPhoto());
+	            intent.putExtra("categ", entry.getCateg());
 	            Bundle extras = new Bundle();
 	            intent.putExtras(extras);
 	            startActivity(intent);
 	        }
-	    });*/
+	    });
 	}
 	
 	private ArrayList<Product> generateData() throws JSONException, Throwable{

@@ -23,7 +23,7 @@ public class ProductAdapter extends ArrayAdapter<Product> {
  
         public ProductAdapter(Context context, ArrayList<Product> productsArrayList) {
  
-            super(context, R.layout.categoryrow, productsArrayList);
+            super(context, R.layout.productrow, productsArrayList);
  
             this.context = context;
             this.productsArrayList = productsArrayList;
