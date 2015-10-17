@@ -30,16 +30,20 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar.LayoutParams;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.MeasureSpec;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -255,6 +259,7 @@ class CallApi extends AsyncTask<Void, Void, Boolean> {
 	    ListView listView = (ListView) findViewById(R.id.categoriesList);
 	
 	    listView.setAdapter(adapter);
+	    setListViewHeightBasedOnChildren(listView);
 	    listView.setOnItemClickListener(new OnItemClickListener() {
 	        public void onItemClick(AdapterView<?> parent, View view, int position,long id) {
 	        	Category entry = (Category) parent.getItemAtPosition(position);
@@ -311,4 +316,34 @@ class CallApi extends AsyncTask<Void, Void, Boolean> {
      		  new CallApi().execute();
      	  }
      	}
+	  public static void setListViewHeightBasedOnChildren(ListView listView) 
+	  {
+	      ListAdapter listAdapter = listView.getAdapter();
+	      if (listAdapter == null)
+	          return;
+
+	      int desiredWidth = MeasureSpec.makeMeasureSpec(listView.getWidth(), MeasureSpec.UNSPECIFIED);
+	      int totalHeight=0;
+	      View view = null;
+
+	      for (int i = 0; i < listAdapter.getCount(); i++) 
+	      {
+	          view = listAdapter.getView(i, view, listView);
+
+	          if (i == 0)
+	              view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth,  
+	                                        LayoutParams.WRAP_CONTENT));
+
+	          view.measure(desiredWidth, MeasureSpec.UNSPECIFIED);
+	          totalHeight += view.getMeasuredHeight();
+
+	      }
+
+	      ViewGroup.LayoutParams params = listView.getLayoutParams();
+	      params.height = totalHeight + ((listView.getDividerHeight()) * (listAdapter.getCount()));
+
+	      listView.setLayoutParams(params);
+	      listView.requestLayout();
+
+	  }
 }
