@@ -28,7 +28,7 @@ public class ProductPageActivity extends ActionBarActivity{
     private DrawerLayout mDrawerLayout;
     private DrawerAdapter mAdapter;
 	private ActionBarDrawerToggle mDrawerToggle;
-    private String mActivityTitle;
+    private int mActivityTitle;
 	private String sku;
 	private String name;
 	private String url;
@@ -46,7 +46,7 @@ public class ProductPageActivity extends ActionBarActivity{
 		//spinner.setVisibility(View.VISIBLE);	
 	 	mDrawerList = (ListView)findViewById(R.id.navList);
 	 	mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
-        mActivityTitle = "Details";
+        mActivityTitle = mActivityTitle = R.string.title_activity_product_page;
         addDrawerItems();
         setupDrawer();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

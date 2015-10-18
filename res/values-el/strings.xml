@@ -40,5 +40,8 @@
     <string name="title_activity_faq">FAQ</string>
     <string name="title_activity_products">Προϊόντα</string>
     <string name="title_activity_product_page">Λεπτομέρειες</string>
+    <string name="languageupdate">Αλλαγή γλώσσας</string>
+    <string name="english">Αγγλικά</string>
+    <string name="greek">Ελληνικά</string>
 
 </resources>

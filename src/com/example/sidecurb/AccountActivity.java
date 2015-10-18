@@ -22,7 +22,7 @@ public class AccountActivity extends ActionBarActivity {
     private DrawerLayout mDrawerLayout;
     private DrawerAdapter mAdapter;
 	private ActionBarDrawerToggle mDrawerToggle;
-    private String mActivityTitle;
+    private int mActivityTitle;
     private HttpEntity json;
 	
 	@Override
@@ -31,7 +31,7 @@ public class AccountActivity extends ActionBarActivity {
 		setContentView(R.layout.activity_account);
 	 	mDrawerList = (ListView)findViewById(R.id.navList);
 	 	mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
-        mActivityTitle = "Account";
+        mActivityTitle = R.string.title_activity_account;
         //new CallApi().execute();
         addDrawerItems();
         setupDrawer();

@@ -2,6 +2,8 @@ package com.example.sidecurb;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Locale;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.ParseException;
@@ -38,17 +40,18 @@ public class MainScreenActivity extends ActionBarActivity {
     private DrawerLayout mDrawerLayout;
     private DrawerAdapter mAdapter;
 	private ActionBarDrawerToggle mDrawerToggle;
-    private String mActivityTitle;
+    private int mActivityTitle;
     private String json;
 	private double lon;
 	private double lat;
 	private LocationManager mlocManager;
 	private LocationListener mlocListener;
 	private ProgressBar spinner;
-	
-	
+	private int langSelected = -1;
+	private Bundle saved;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+			
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main_screen);
 		spinner = (ProgressBar)findViewById(R.id.progress);
@@ -59,7 +62,7 @@ public class MainScreenActivity extends ActionBarActivity {
 		mlocManager.requestLocationUpdates( LocationManager.NETWORK_PROVIDER, 0, 0, mlocListener);
 	 	mDrawerList = (ListView)findViewById(R.id.navList);
 	 	mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
-        mActivityTitle = "Stores";
+        mActivityTitle = R.string.title_activity_main_screen;
         addDrawerItems();
         setupDrawer();
 
@@ -144,8 +147,11 @@ public class MainScreenActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.english) {
+        	updateconfig("en");
+        }
+        else{
+        	updateconfig("el");
         }
 
         // Activate the navigation drawer toggle
@@ -303,4 +309,20 @@ public class MainScreenActivity extends ActionBarActivity {
 	    }
 
     }
+    
+    public void updateconfig(String s){
+		String languageToLoad = s;
+		Locale locale = new Locale(languageToLoad);
+		Locale.setDefault(locale);
+		Configuration config = new Configuration();
+		config.locale = locale;
+		getBaseContext().getResources().updateConfiguration(config , getBaseContext().getResources().getDisplayMetrics());
+		Bundle tempBundle = new Bundle();
+		onCreate(tempBundle);
+		//setTitle(R.string.app_name);
+		//this.setContentView(R.layout.activity_main);
+		//langSelected = 0;
+		invalidateOptionsMenu();
+    }
+    
 }

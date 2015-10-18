@@ -31,7 +31,7 @@ public class FAQActivity extends ActionBarActivity {
     private DrawerLayout mDrawerLayout;
     private DrawerAdapter mAdapter;
 	private ActionBarDrawerToggle mDrawerToggle;
-    private String mActivityTitle;
+    private int mActivityTitle;
     private HttpEntity json;
 	
 	@Override
@@ -40,7 +40,7 @@ public class FAQActivity extends ActionBarActivity {
 		setContentView(R.layout.activity_faq);
 	 	mDrawerList = (ListView)findViewById(R.id.navList);
 	 	mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
-        mActivityTitle = "FAQ";
+        mActivityTitle = R.string.title_activity_faq;
         //new CallApi().execute();
         addDrawerItems();
         setupDrawer();

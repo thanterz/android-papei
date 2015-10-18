@@ -50,7 +50,7 @@ public class ProductsActivity extends ActionBarActivity {
     private DrawerLayout mDrawerLayout;
     private DrawerAdapter mAdapter;
 	private ActionBarDrawerToggle mDrawerToggle;
-    private String mActivityTitle;
+    private int mActivityTitle;
     private String json;
 	private String url;
 	private Intent intent;
@@ -63,7 +63,7 @@ public class ProductsActivity extends ActionBarActivity {
 		spinner.setVisibility(View.VISIBLE);	
 	 	mDrawerList = (ListView)findViewById(R.id.navList);
 	 	mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
-        mActivityTitle = "Products";
+        mActivityTitle = R.string.title_activity_products;
         addDrawerItems();
         setupDrawer();
         intent = getIntent();
