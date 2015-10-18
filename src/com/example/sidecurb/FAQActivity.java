@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import org.apache.http.HttpEntity;
 import org.json.JSONArray;
@@ -33,14 +34,17 @@ public class FAQActivity extends ActionBarActivity {
 	private ActionBarDrawerToggle mDrawerToggle;
     private int mActivityTitle;
     private HttpEntity json;
+	private int langSelected = -1;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+		if(langSelected==-1)	
+			super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_faq);
 	 	mDrawerList = (ListView)findViewById(R.id.navList);
 	 	mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         mActivityTitle = R.string.title_activity_faq;
+        getSupportActionBar().setTitle(mActivityTitle);
         //new CallApi().execute();
         addDrawerItems();
         setupDrawer();
@@ -63,6 +67,7 @@ public class FAQActivity extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             	Intent intent ;
+            	langSelected = -1;
             	if(position==0){
             		intent = new Intent(FAQActivity.this, MainScreenActivity.class);
             	}
@@ -88,7 +93,7 @@ public class FAQActivity extends ActionBarActivity {
 
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                getSupportActionBar().setTitle("Navigation!");
+                getSupportActionBar().setTitle(R.string.app_name);
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
 
@@ -131,8 +136,11 @@ public class FAQActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.english) {
+        	updateconfig("en");
+        }
+        else if(id == R.id.greek){
+        	updateconfig("el");
         }
 
         // Activate the navigation drawer toggle
@@ -164,6 +172,20 @@ public class FAQActivity extends ActionBarActivity {
 	    FAQ.add(new FAQ("Can I have someone else pick up for me?", "Many of our locations allow you to have someone pickup on your behalf. Before placing a pickup, click the Handoff link to complete the setup. The person you select needs a Curbside account and will be asked to show photo ID at time of pickup."));
 	    
         return FAQ;
+    }
+    
+    public void updateconfig(String s){
+		String languageToLoad = s;
+		Locale locale = new Locale(languageToLoad);
+		Locale.setDefault(locale);
+		Configuration config = new Configuration();
+		config.locale = locale;
+		getBaseContext().getResources().updateConfiguration(config , getBaseContext().getResources().getDisplayMetrics());
+		langSelected = 0;
+		Bundle tempBundle = new Bundle();
+		onCreate(tempBundle);
+		getSupportActionBar().setTitle(R.string.title_activity_faq);
+		invalidateOptionsMenu();
     }
 }
 

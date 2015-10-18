@@ -32,18 +32,28 @@ public class DrawerAdapter extends ArrayAdapter<String> {
  
             // 3. Get the two text view from the rowView
             TextView drawerAction = (TextView) rowView.findViewById(R.id.name);
-            drawerAction.setText(DrawerArrayList[position]);
+            
             ImageView iconDrawer = (ImageView) rowView.findViewById(R.id.imageIcon);
-            if(position == 0)
+            if(position == 0){
+            	drawerAction.setText(R.string.title_activity_main_screen);
             	iconDrawer.setImageResource(R.drawable.store);
-            else if (position == 1)
+            }
+            else if (position == 1){
+            	drawerAction.setText(R.string.title_activity_categories);
             	iconDrawer.setImageResource(R.drawable.redicon);
-            else if (position == 2)
+            }
+            else if (position == 2){
+            	drawerAction.setText(R.string.title_activity_cart);
             	iconDrawer.setImageResource(R.drawable.fullcart);	
-            else if (position == 3)
+            }
+            else if (position == 3){
+            	drawerAction.setText(R.string.title_activity_account);
             	iconDrawer.setImageResource(R.drawable.kalathi);
-            else if (position == 4)
+            }
+            else if (position == 4){
+            	drawerAction.setText(R.string.title_activity_faq);
             	iconDrawer.setImageResource(R.drawable.redicon);
+        	}
             
             return rowView;
         }

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -17,6 +18,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import android.support.v7.app.ActionBarActivity;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
@@ -31,14 +33,19 @@ import android.widget.Toast;
 
 public class LoginActivity2 extends ActionBarActivity {
 	
-	EditText emailString;
-	EditText passwordString;
-	Button loginbtn;
+	private EditText emailString;
+	private EditText passwordString;
+	private Button loginbtn;
+	private int langSelected = -1;
+	private int mActivityTitle;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+		if(langSelected==-1)	
+			super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login2);
+        mActivityTitle = R.string.title_activity_login_activity2;
+        getSupportActionBar().setTitle(mActivityTitle);
 		emailString = (EditText) findViewById(R.id.emailinput);
 		passwordString = (EditText) findViewById(R.id.passwordinput);
 	    loginbtn = (Button) findViewById(R.id.loginbtn);
@@ -122,9 +129,26 @@ public class LoginActivity2 extends ActionBarActivity {
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
+		if (id == R.id.english) {
+        	updateconfig("en");
+        }
+        else if(id == R.id.greek){
+        	updateconfig("el");
+        }
 		return super.onOptionsItemSelected(item);
 	}
+	
+    public void updateconfig(String s){
+		String languageToLoad = s;
+		Locale locale = new Locale(languageToLoad);
+		Locale.setDefault(locale);
+		Configuration config = new Configuration();
+		config.locale = locale;
+		getBaseContext().getResources().updateConfiguration(config , getBaseContext().getResources().getDisplayMetrics());
+		langSelected = 0;
+		Bundle tempBundle = new Bundle();
+		onCreate(tempBundle);
+		getSupportActionBar().setTitle(R.string.title_activity_login_activity2);
+		invalidateOptionsMenu();
+    }
 }

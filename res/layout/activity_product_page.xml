@@ -31,7 +31,7 @@
 		        android:layout_alignParentLeft="true"
 		        android:layout_alignParentRight="true"
 		        android:layout_below="@+id/image"
-		        android:text="Περιγραφή"
+		        android:text="@string/description"
 		        android:textSize="20sp" />
 		    
 		    <TextView
@@ -41,7 +41,7 @@
 		        android:layout_alignParentLeft="true"
 		        android:layout_alignParentRight="true"
 		        android:layout_below="@+id/label"
-		        android:text="test"
+		        android:text="@string/empty"
 		        android:paddingLeft="5dp"
 		        android:paddingTop="10dp"
 		        android:paddingBottom="15dp"
@@ -58,7 +58,7 @@
 			        android:id="@+id/labelpr"
 			        android:layout_width="wrap_content"
 			        android:layout_height="wrap_content"
-			        android:text="Τιμή:  "
+			        android:text="@string/price"
 			        android:textSize="18sp" />
 			    	    
 			    <TextView
@@ -78,7 +78,7 @@
 	        	    android:layout_width="wrap_content"
 	        	    android:layout_height="wrap_content"
 	        	    android:layout_weight="1.31"
-	        	    android:text="Buy!" />
+	        	    android:text="@string/buy" />
         	    
 	        	
 			    <EditText 

@@ -43,5 +43,10 @@
     <string name="languageupdate">Αλλαγή γλώσσας</string>
     <string name="english">Αγγλικά</string>
     <string name="greek">Ελληνικά</string>
+    <string name="readytext">Παραλαβή σε 2 ώρες!</string>
+    <string name="description">Περιγραφή: </string>
+    <string name="price">Τιμη: </string>
+    <string name="empty"/>
+    <string name="buy">Αγόρασε!</string>
 
 </resources>

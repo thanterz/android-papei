@@ -3,6 +3,7 @@ package com.example.sidecurb;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -68,15 +69,18 @@ import android.widget.AdapterView.OnItemClickListener;
 	private String distance;
 	private ProgressBar spinner;
 	private Intent intent;
+	private int langSelected = -1;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+		if(langSelected==-1)	
+			super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_categories);
 		spinner = (ProgressBar)findViewById(R.id.progress);
 		spinner.setVisibility(View.VISIBLE);	
 	 	mDrawerList = (ListView)findViewById(R.id.navList);
 	 	mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         mActivityTitle = R.string.title_activity_categories;
+        getSupportActionBar().setTitle(mActivityTitle);
         //new CallApi().execute();
         addDrawerItems();
         setupDrawer();
@@ -116,7 +120,7 @@ import android.widget.AdapterView.OnItemClickListener;
         shopName.setText(name);
         shopAddress.setText(address);
         distView.setText(distance);
-        timeView.setText("Ready in 2 hours!");
+        timeView.setText(R.string.readytext);
         new DownloadImageTask(imageView).execute(logo);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -131,6 +135,7 @@ import android.widget.AdapterView.OnItemClickListener;
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             	Intent intent ;
+            	langSelected = -1;
             	if(position==0){
             		intent = new Intent(CategoriesActivity.this, MainScreenActivity.class);
             	}
@@ -156,7 +161,7 @@ import android.widget.AdapterView.OnItemClickListener;
 
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                getSupportActionBar().setTitle("Navigation!");
+                getSupportActionBar().setTitle(R.string.app_name);
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
 
@@ -199,8 +204,11 @@ import android.widget.AdapterView.OnItemClickListener;
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.english) {
+        	updateconfig("en");
+        }
+        else if(id == R.id.greek){
+        	updateconfig("el");
         }
 
         // Activate the navigation drawer toggle
@@ -364,4 +372,18 @@ class CallApi extends AsyncTask<Void, Void, Boolean> {
 	      listView.requestLayout();
 
 	  }
+	  
+	  public void updateconfig(String s){
+			String languageToLoad = s;
+			Locale locale = new Locale(languageToLoad);
+			Locale.setDefault(locale);
+			Configuration config = new Configuration();
+			config.locale = locale;
+			getBaseContext().getResources().updateConfiguration(config , getBaseContext().getResources().getDisplayMetrics());
+			langSelected = 0;
+			Bundle tempBundle = new Bundle();
+			onCreate(tempBundle);
+			getSupportActionBar().setTitle(R.string.title_activity_categories);
+			invalidateOptionsMenu();
+	    }
 }

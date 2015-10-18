@@ -43,5 +43,10 @@
     <string name="languageupdate">Change Language</string>
     <string name="english">English</string>
     <string name="greek">Greek</string>
+    <string name="readytext">Ready in 2 hours!</string>
+    <string name="description">Description: </string>
+    <string name="price">Price: </string>
+    <string name="empty"></string>
+    <string name="buy">Buy!</string>
 
 </resources>

@@ -48,11 +48,10 @@ public class MainScreenActivity extends ActionBarActivity {
 	private LocationListener mlocListener;
 	private ProgressBar spinner;
 	private int langSelected = -1;
-	private Bundle saved;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-			
-		super.onCreate(savedInstanceState);
+		if(langSelected==-1)	
+			super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main_screen);
 		spinner = (ProgressBar)findViewById(R.id.progress);
 		spinner.setVisibility(View.VISIBLE);	
@@ -63,6 +62,7 @@ public class MainScreenActivity extends ActionBarActivity {
 	 	mDrawerList = (ListView)findViewById(R.id.navList);
 	 	mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         mActivityTitle = R.string.title_activity_main_screen;
+        getSupportActionBar().setTitle(mActivityTitle);
         addDrawerItems();
         setupDrawer();
 
@@ -79,6 +79,7 @@ public class MainScreenActivity extends ActionBarActivity {
         	@Override
         	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             	Intent intent ;
+            	langSelected = -1;
             	if(position==0){
             		intent = new Intent(MainScreenActivity.this, MainScreenActivity.class);
             	}
@@ -104,7 +105,7 @@ public class MainScreenActivity extends ActionBarActivity {
 
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                getSupportActionBar().setTitle("Navigation!");
+                getSupportActionBar().setTitle(R.string.app_name);
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
 
@@ -147,12 +148,12 @@ public class MainScreenActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        /*if (id == R.id.english) {
+        if (id == R.id.english) {
         	updateconfig("en");
         }
-        else{
+        else if(id == R.id.greek){
         	updateconfig("el");
-        }*/
+        }
 
         // Activate the navigation drawer toggle
         if (mDrawerToggle.onOptionsItemSelected(item)) {
@@ -317,11 +318,10 @@ public class MainScreenActivity extends ActionBarActivity {
 		Configuration config = new Configuration();
 		config.locale = locale;
 		getBaseContext().getResources().updateConfiguration(config , getBaseContext().getResources().getDisplayMetrics());
+		langSelected = 0;
 		Bundle tempBundle = new Bundle();
 		onCreate(tempBundle);
-		//setTitle(R.string.app_name);
-		//this.setContentView(R.layout.activity_main);
-		//langSelected = 0;
+		getSupportActionBar().setTitle(R.string.title_activity_main_screen);
 		invalidateOptionsMenu();
     }
     

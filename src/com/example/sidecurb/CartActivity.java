@@ -1,5 +1,7 @@
 package com.example.sidecurb;
 
+import java.util.Locale;
+
 import org.apache.http.HttpEntity;
 
 import android.app.Activity;
@@ -22,8 +24,9 @@ public class CartActivity extends ActionBarActivity {
     private DrawerLayout mDrawerLayout;
     private DrawerAdapter mAdapter;
 	private ActionBarDrawerToggle mDrawerToggle;
-    private String mActivityTitle;
+    private int mActivityTitle;
     private HttpEntity json;
+	private int langSelected = -1;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +34,8 @@ public class CartActivity extends ActionBarActivity {
 		setContentView(R.layout.activity_cart);
 	 	mDrawerList = (ListView)findViewById(R.id.navList);
 	 	mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
-        mActivityTitle = "Cart";
+        mActivityTitle = R.string.title_activity_cart;
+        getSupportActionBar().setTitle(mActivityTitle);
         //new CallApi().execute();
         addDrawerItems();
         setupDrawer();
@@ -49,6 +53,7 @@ public class CartActivity extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             	Intent intent ;
+            	langSelected = -1;
             	if(position==0){
             		intent = new Intent(CartActivity.this, MainScreenActivity.class);
             	}
@@ -74,7 +79,7 @@ public class CartActivity extends ActionBarActivity {
 
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                getSupportActionBar().setTitle("Navigation!");
+                getSupportActionBar().setTitle(R.string.app_name);
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
 
@@ -117,8 +122,11 @@ public class CartActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.english) {
+        	updateconfig("en");
+        }
+        else if(id == R.id.greek){
+        	updateconfig("el");
         }
 
         // Activate the navigation drawer toggle
@@ -127,6 +135,20 @@ public class CartActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+    
+    public void updateconfig(String s){
+		String languageToLoad = s;
+		Locale locale = new Locale(languageToLoad);
+		Locale.setDefault(locale);
+		Configuration config = new Configuration();
+		config.locale = locale;
+		getBaseContext().getResources().updateConfiguration(config , getBaseContext().getResources().getDisplayMetrics());
+		langSelected = 0;
+		Bundle tempBundle = new Bundle();
+		onCreate(tempBundle);
+		getSupportActionBar().setTitle(R.string.title_activity_account);
+		invalidateOptionsMenu();
     }
 }
 
