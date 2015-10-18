@@ -82,8 +82,12 @@ public class MainScreenActivity extends ActionBarActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
 	}
 	
+	@Override
+	public void onBackPressed() {
+	}
+	
 	private void addDrawerItems() {
-        String[] menuArray = { "Stores", "Categories", "My Cart", "My Account", "FAQ" };
+        String[] menuArray = { "Stores", "Categories", "My Cart", "My Account", "FAQ" ,"Log Out"};
         mAdapter = new DrawerAdapter(MainScreenActivity.this, menuArray);
         mDrawerList.setAdapter(mAdapter);
         
@@ -104,8 +108,11 @@ public class MainScreenActivity extends ActionBarActivity {
             	else if(position == 3){
             		intent = new Intent(MainScreenActivity.this, AccountActivity.class);
             	}
-            	else{
+            	else if(position == 4){
             		intent = new Intent(MainScreenActivity.this, FAQActivity.class);
+            	}
+            	else{
+            		intent = new Intent(MainScreenActivity.this, MainActivity.class);
             	}
 				startActivity(intent);
             }

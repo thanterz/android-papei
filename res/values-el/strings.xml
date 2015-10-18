@@ -49,5 +49,6 @@
     <string name="empty"/>
     <string name="buy">Αγόρασε!</string>
     <string name="updatebtn">Ανανέωση Στοιχείων</string>
+    <string name="logout">Έξοδοςν</string>
 
 </resources>

@@ -50,5 +50,6 @@
     <string name="empty"></string>
     <string name="buy">Buy!</string>
     <string name="updatebtn">Update</string>
+    <string name="logout">Log Out</string>
 
 </resources>
