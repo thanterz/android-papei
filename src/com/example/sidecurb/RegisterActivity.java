@@ -220,6 +220,9 @@ class CallApi extends AsyncTask<Void, Void, Boolean> {
 				if(jsonstring.indexOf("key")>-1){
 					return true;
 				}
+				else{
+					return false;
+				}
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

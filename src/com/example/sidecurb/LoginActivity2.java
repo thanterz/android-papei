@@ -90,6 +90,9 @@ public class LoginActivity2 extends ActionBarActivity {
 				if(json.indexOf("key")>-1){
 					return true;
 				}
+				else{
+					return false;
+				}
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

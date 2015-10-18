@@ -54,6 +54,10 @@ public class DrawerAdapter extends ArrayAdapter<String> {
             	drawerAction.setText(R.string.title_activity_faq);
             	iconDrawer.setImageResource(R.drawable.redicon);
         	}
+            else if(position == 5){
+            	drawerAction.setText(R.string.logout);
+            	iconDrawer.setImageResource(R.drawable.exit);
+            }
             
             return rowView;
         }
