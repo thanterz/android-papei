@@ -48,5 +48,6 @@
     <string name="price">Price: </string>
     <string name="empty"></string>
     <string name="buy">Buy!</string>
+    <string name="updatebtn">Update</string>
 
 </resources>

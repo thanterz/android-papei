@@ -48,5 +48,6 @@
     <string name="price">Τιμη: </string>
     <string name="empty"/>
     <string name="buy">Αγόρασε!</string>
+    <string name="updatebtn">Ανανέωση Στοιχείων</string>
 
 </resources>
