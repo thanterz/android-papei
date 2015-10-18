@@ -78,7 +78,6 @@ public class MainScreenActivity extends ActionBarActivity {
         getSupportActionBar().setTitle(mActivityTitle);
         addDrawerItems();
         setupDrawer();
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 	}
