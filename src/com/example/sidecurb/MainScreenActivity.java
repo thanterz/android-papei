@@ -147,12 +147,12 @@ public class MainScreenActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.english) {
+        /*if (id == R.id.english) {
         	updateconfig("en");
         }
         else{
         	updateconfig("el");
-        }
+        }*/
 
         // Activate the navigation drawer toggle
         if (mDrawerToggle.onOptionsItemSelected(item)) {
