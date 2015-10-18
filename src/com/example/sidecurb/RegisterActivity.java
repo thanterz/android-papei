@@ -55,9 +55,7 @@ public class RegisterActivity extends ActionBarActivity {
 		emailText = (EditText)findViewById(R.id.emailinput);
 		Button register =  (Button)findViewById(R.id.registerbt);
 		mActivityTitle = R.string.title_activity_register;
-	        getSupportActionBar().setTitle(mActivityTitle);
-		TextView register =  (TextView)findViewById(R.id.loginbtn);
-        
+	        getSupportActionBar().setTitle(mActivityTitle);        
         register.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
