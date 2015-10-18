@@ -48,7 +48,7 @@ public class ShopsAdapter extends ArrayAdapter<Shop> {
             addressView.setText(shopsArrayList.get(position).getAddress());
             nameView.setText(shopsArrayList.get(position).getName());
             distanceView.setText(shopsArrayList.get(position).getDistance());
-            timeView.setText("Ready in 2 hours!");
+            timeView.setText(R.string.readytext);
             new DownloadImageTask(imageView).execute(shopsArrayList.get(position).getLogo());
             
             return rowView;

@@ -1,8 +1,9 @@
 package com.example.sidecurb;
 
+import java.util.Locale;
+
 import org.apache.http.HttpEntity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -13,7 +14,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 public class AccountActivity extends ActionBarActivity {
@@ -22,16 +22,19 @@ public class AccountActivity extends ActionBarActivity {
     private DrawerLayout mDrawerLayout;
     private DrawerAdapter mAdapter;
 	private ActionBarDrawerToggle mDrawerToggle;
-    private String mActivityTitle;
+    private int mActivityTitle;
     private HttpEntity json;
+	private int langSelected = -1;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+		if(langSelected==-1)	
+			super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_account);
 	 	mDrawerList = (ListView)findViewById(R.id.navList);
 	 	mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
-        mActivityTitle = "Account";
+        mActivityTitle = R.string.title_activity_account;
+        getSupportActionBar().setTitle(mActivityTitle);
         //new CallApi().execute();
         addDrawerItems();
         setupDrawer();
@@ -49,6 +52,7 @@ public class AccountActivity extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             	Intent intent ;
+            	langSelected = -1;
             	if(position==0){
             		intent = new Intent(AccountActivity.this, MainScreenActivity.class);
             	}
@@ -74,7 +78,7 @@ public class AccountActivity extends ActionBarActivity {
 
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                getSupportActionBar().setTitle("Navigation!");
+                getSupportActionBar().setTitle(R.string.app_name);
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
 
@@ -117,8 +121,11 @@ public class AccountActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.english) {
+        	updateconfig("en");
+        }
+        else if(id == R.id.greek){
+        	updateconfig("el");
         }
 
         // Activate the navigation drawer toggle
@@ -127,6 +134,20 @@ public class AccountActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+    
+    public void updateconfig(String s){
+		String languageToLoad = s;
+		Locale locale = new Locale(languageToLoad);
+		Locale.setDefault(locale);
+		Configuration config = new Configuration();
+		config.locale = locale;
+		getBaseContext().getResources().updateConfiguration(config , getBaseContext().getResources().getDisplayMetrics());
+		langSelected = 0;
+		Bundle tempBundle = new Bundle();
+		onCreate(tempBundle);
+		getSupportActionBar().setTitle(R.string.title_activity_account);
+		invalidateOptionsMenu();
     }
 }
 

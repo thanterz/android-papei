@@ -1,6 +1,7 @@
 package com.example.sidecurb;
 
 import java.io.InputStream;
+import java.util.Locale;
 
 
 import android.content.Intent;
@@ -28,7 +29,7 @@ public class ProductPageActivity extends ActionBarActivity{
     private DrawerLayout mDrawerLayout;
     private DrawerAdapter mAdapter;
 	private ActionBarDrawerToggle mDrawerToggle;
-    private String mActivityTitle;
+    private int mActivityTitle;
 	private String sku;
 	private String name;
 	private String url;
@@ -38,15 +39,18 @@ public class ProductPageActivity extends ActionBarActivity{
 	private String categ;
 	private ProgressBar spinner;
 	private Intent intent;
+	private int langSelected = -1;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+		if(langSelected==-1)	
+			super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_product_page);
 		//spinner = (ProgressBar)findViewById(R.id.progress);
 		//spinner.setVisibility(View.VISIBLE);	
 	 	mDrawerList = (ListView)findViewById(R.id.navList);
 	 	mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
-        mActivityTitle = "Details";
+        mActivityTitle =  R.string.title_activity_product_page;
+        getSupportActionBar().setTitle(mActivityTitle);
         addDrawerItems();
         setupDrawer();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -77,6 +81,7 @@ public class ProductPageActivity extends ActionBarActivity{
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             	Intent intent ;
+            	langSelected = -1;
             	if(position==0){
             		intent = new Intent(ProductPageActivity.this, MainScreenActivity.class);
             	}
@@ -102,7 +107,7 @@ public class ProductPageActivity extends ActionBarActivity{
 
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                getSupportActionBar().setTitle("Navigation!");
+                getSupportActionBar().setTitle(R.string.app_name);
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
 
@@ -145,8 +150,11 @@ public class ProductPageActivity extends ActionBarActivity{
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.english) {
+        	updateconfig("en");
+        }
+        else if(id == R.id.greek){
+        	updateconfig("el");
         }
 
         // Activate the navigation drawer toggle
@@ -181,5 +189,19 @@ public class ProductPageActivity extends ActionBarActivity{
      	  protected void onPostExecute(Bitmap result) {
      		  bmImage.setImageBitmap(result);
      	  }
-     	}
+ 	}
+    
+    public void updateconfig(String s){
+		String languageToLoad = s;
+		Locale locale = new Locale(languageToLoad);
+		Locale.setDefault(locale);
+		Configuration config = new Configuration();
+		config.locale = locale;
+		getBaseContext().getResources().updateConfiguration(config , getBaseContext().getResources().getDisplayMetrics());
+		langSelected = 0;
+		Bundle tempBundle = new Bundle();
+		onCreate(tempBundle);
+		getSupportActionBar().setTitle(R.string.title_activity_product_page);
+		invalidateOptionsMenu();
+    }
 }
