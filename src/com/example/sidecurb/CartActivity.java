@@ -30,7 +30,8 @@ public class CartActivity extends ActionBarActivity {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+		if(langSelected==-1)	
+			super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_cart);
 	 	mDrawerList = (ListView)findViewById(R.id.navList);
 	 	mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
@@ -150,7 +151,7 @@ public class CartActivity extends ActionBarActivity {
 		langSelected = 0;
 		Bundle tempBundle = new Bundle();
 		onCreate(tempBundle);
-		getSupportActionBar().setTitle(R.string.title_activity_account);
+		getSupportActionBar().setTitle(R.string.title_activity_cart);
 		invalidateOptionsMenu();
     }
 }

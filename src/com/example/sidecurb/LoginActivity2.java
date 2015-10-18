@@ -16,8 +16,13 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import android.support.v7.app.ActionBarActivity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -38,7 +43,7 @@ public class LoginActivity2 extends ActionBarActivity {
 	private Button loginbtn;
 	private int langSelected = -1;
 	private int mActivityTitle;
-	
+	private String json;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		if(langSelected==-1)	
@@ -86,7 +91,7 @@ public class LoginActivity2 extends ActionBarActivity {
 				e1.printStackTrace();
 			}
             try {
-				String json = EntityUtils.toString(response.getEntity());
+				json = EntityUtils.toString(response.getEntity());
 				if(json.indexOf("key")>-1){
 					return true;
 				}
@@ -109,8 +114,24 @@ public class LoginActivity2 extends ActionBarActivity {
 		@Override
 		protected void onPostExecute(final Boolean success) {
 			if(success.equals(true)){
-				Intent intent = new Intent(LoginActivity2.this, MainScreenActivity.class);
-			    startActivity(intent);
+				try {
+					String key = null;
+					json = "[" + json + "]";
+					JSONArray keyList =  new JSONArray(json);
+					for (int i = 0; i < keyList.length(); i++) {
+					    key = keyList.getJSONObject(i).getString("key");
+					}
+					SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
+					Editor editor = pref.edit();
+					editor.putString("key", key);
+					editor.commit();
+					Toast.makeText(getApplicationContext(), key, Toast.LENGTH_SHORT).show();
+					Intent intent = new Intent(LoginActivity2.this, MainScreenActivity.class);
+				    startActivity(intent);
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
             }
 			else{
 				Toast.makeText(getApplicationContext(), "Login error.Try again!", Toast.LENGTH_SHORT).show();

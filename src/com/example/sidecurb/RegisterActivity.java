@@ -15,6 +15,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import com.example.sidecurb.LoginActivity2.CallApi;
 import java.util.Locale;
@@ -22,7 +24,9 @@ import java.util.Locale;
 import android.support.v7.app.ActionBarActivity;
 import android.R.string;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
@@ -122,9 +126,24 @@ class CallApi extends AsyncTask<Void, Void, Boolean> {
 		@Override
 		protected void onPostExecute(final Boolean success) {
 			if(success.equals(true)){
-				Intent intent = new Intent(RegisterActivity.this, MainScreenActivity.class);
-			    startActivity(intent);
-				//Log.d("register",jsonstring);
+				try {
+					String key = null;
+					jsonstring = "[" + jsonstring + "]";
+					JSONArray keyList =  new JSONArray(jsonstring);
+					for (int i = 0; i < keyList.length(); i++) {
+					    key = keyList.getJSONObject(i).getString("key");
+					}
+					SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
+					Editor editor = pref.edit();
+					editor.putString("key", key);
+					editor.commit();
+					Toast.makeText(getApplicationContext(), key, Toast.LENGTH_SHORT).show();
+					Intent intent = new Intent(RegisterActivity.this, MainScreenActivity.class);
+				    startActivity(intent);
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
             }
 			else{
 				Toast.makeText(getApplicationContext(), "Register error.Try again!", Toast.LENGTH_SHORT).show();
