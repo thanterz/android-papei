@@ -1,21 +1,54 @@
 package com.example.sidecurb;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.ParseException;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
+
+import com.example.sidecurb.LoginActivity2.CallApi;
+
 import android.support.v7.app.ActionBarActivity;
+import android.R.string;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class RegisterActivity extends ActionBarActivity {
 
+	private EditText usernameText;
+	private EditText pass1Text;
+	private EditText pass2Text;
+	private EditText emailText;
+	private String jsonstring;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_register);
 		
-		TextView register =  (TextView)findViewById(R.id.loginbtn);
+		usernameText = (EditText)findViewById(R.id.userinput);
+		pass1Text= (EditText)findViewById(R.id.passwordinput1);
+		pass2Text = (EditText)findViewById(R.id.passwordinput2);
+		emailText = (EditText)findViewById(R.id.emailinput);
+		Button register =  (Button)findViewById(R.id.registerbt);
         
         register.setOnClickListener(new View.OnClickListener() {
 			
@@ -23,11 +56,72 @@ public class RegisterActivity extends ActionBarActivity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				//Intent intent = new Intent(MainActivity.this, LoginActivity2.class);
-				Intent intent = new Intent(RegisterActivity.this, MainScreenActivity.class);
-				startActivity(intent);
+				//Intent intent = new Intent(RegisterActivity.this, MainScreenActivity.class);
+				//startActivity(intent);
+				new CallApi().execute();
 			}
 		});
 		
+	}
+	
+class CallApi extends AsyncTask<Void, Void, Boolean> {
+		
+		@Override
+		protected Boolean doInBackground(Void... params) {
+			// TODO: attempt authentication against a network service.
+			HttpClient httpclient = new DefaultHttpClient();
+			HttpPost httppost = new HttpPost("http://www.theama.info/curbweb/rest-auth/registration/");
+			List<NameValuePair> nameValuePair = new ArrayList<NameValuePair>(4);
+			nameValuePair.add(new BasicNameValuePair("username", usernameText.getText().toString()));
+			nameValuePair.add(new BasicNameValuePair("password1", pass1Text.getText().toString()));
+			nameValuePair.add(new BasicNameValuePair("password2", pass2Text.getText().toString()));
+			nameValuePair.add(new BasicNameValuePair("email", emailText.getText().toString()));
+			try {
+				httppost.setEntity(new UrlEncodedFormEntity(nameValuePair));
+			} catch (UnsupportedEncodingException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+            HttpResponse response = null;
+			try {
+				response = httpclient.execute(httppost);
+			} catch (ClientProtocolException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+            try {
+				jsonstring = EntityUtils.toString(response.getEntity());
+				if(jsonstring.indexOf("key")>-1){
+					return true;
+				}
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+            
+            return null;
+
+		}
+		
+
+		@Override
+		protected void onPostExecute(final Boolean success) {
+			if(success.equals(true)){
+				Intent intent = new Intent(RegisterActivity.this, MainScreenActivity.class);
+			    startActivity(intent);
+				//Log.d("register",jsonstring);
+            }
+			else{
+				Toast.makeText(getApplicationContext(), "Register error.Try again!", Toast.LENGTH_SHORT).show();
+			}
+		}
+
 	}
 
 	@Override
