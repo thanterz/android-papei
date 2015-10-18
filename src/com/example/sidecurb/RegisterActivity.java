@@ -20,10 +20,13 @@ import com.example.sidecurb.LoginActivity2.CallApi;
 import java.util.Locale;
 
 import android.support.v7.app.ActionBarActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.R.string;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.content.res.Configuration;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -31,6 +34,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,6 +47,8 @@ public class RegisterActivity extends ActionBarActivity {
 	private String jsonstring;
 	private int langSelected = -1;
     private int mActivityTitle;
+    private Boolean validBoolean=false;
+    private Boolean identicalBoolean = false;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		if(langSelected==-1)	
@@ -55,7 +61,95 @@ public class RegisterActivity extends ActionBarActivity {
 		emailText = (EditText)findViewById(R.id.emailinput);
 		Button register =  (Button)findViewById(R.id.registerbt);
 		mActivityTitle = R.string.title_activity_register;
-	        getSupportActionBar().setTitle(mActivityTitle);        
+	  
+		
+		usernameText.addTextChangedListener(new TextWatcher() { 
+		    public void afterTextChanged(Editable s) { 
+			final String username = usernameText.getText().toString().trim();
+
+		    if (username.length() > 3)
+		        { 
+		            //Toast.makeText(getApplicationContext(),"valid email address",Toast.LENGTH_SHORT).show();
+		            // or
+		            //textView.setText("valid email");
+		            String uri2 = "@drawable/green_exc";
+		            int imageResource = getResources().getIdentifier(uri2, null, getPackageName());
+
+		             ImageView imageview2= (ImageView)findViewById(R.id.excimageuser);
+		             Drawable res = getResources().getDrawable(imageResource);
+		             imageview2.setImageDrawable(res); 
+		             Boolean validBoolean=true;
+		        }
+		        else
+		        {
+
+		             //Toast.makeText(getApplicationContext(),"Invalid email address",Toast.LENGTH_SHORT).show();
+		            //or
+		            //textView.setText("invalid email");
+		             String uri = "@drawable/red_exc";  // where myresource.png is the file
+                     // extension removed from the String
+
+		             int imageResource = getResources().getIdentifier(uri, null, getPackageName());
+
+		             ImageView imageview= (ImageView)findViewById(R.id.excimageuser);
+		             Drawable res = getResources().getDrawable(imageResource);
+		             imageview.setImageDrawable(res); 
+		        }
+		    } 
+		    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+		    // other stuffs 
+		    } 
+		    public void onTextChanged(CharSequence s, int start, int before, int count) {
+		    // other stuffs 
+		    } 
+		});
+		
+		
+		final String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+
+		emailText.addTextChangedListener(new TextWatcher() { 
+		    public void afterTextChanged(Editable s) { 
+			final String email = emailText.getText().toString().trim();
+
+		    if (email.matches(emailPattern) && s.length() > 0)
+		        { 
+		            //Toast.makeText(getApplicationContext(),"valid email address",Toast.LENGTH_SHORT).show();
+		            // or
+		            //textView.setText("valid email");
+		            String uri2 = "@drawable/green_exc";
+		            int imageResource = getResources().getIdentifier(uri2, null, getPackageName());
+
+		             ImageView imageview2= (ImageView)findViewById(R.id.excimage);
+		             Drawable res = getResources().getDrawable(imageResource);
+		             imageview2.setImageDrawable(res); 
+		             Boolean validBoolean=true;
+		        }
+		        else
+		        {
+		             //Toast.makeText(getApplicationContext(),"Invalid email address",Toast.LENGTH_SHORT).show();
+		            //or
+		            //textView.setText("invalid email");
+		             String uri = "@drawable/red_exc";  // where myresource.png is the file
+                     // extension removed from the String
+
+		             int imageResource = getResources().getIdentifier(uri, null, getPackageName());
+
+		             ImageView imageview= (ImageView)findViewById(R.id.excimage);
+		             Drawable res = getResources().getDrawable(imageResource);
+		             imageview.setImageDrawable(res); 
+		        }
+		    } 
+		    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+		    // other stuffs 
+		    } 
+		    public void onTextChanged(CharSequence s, int start, int before, int count) {
+		    // other stuffs 
+		    } 
+		});
+		
+		
+		
+		getSupportActionBar().setTitle(mActivityTitle);        
         register.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
@@ -64,7 +158,30 @@ public class RegisterActivity extends ActionBarActivity {
 				//Intent intent = new Intent(MainActivity.this, LoginActivity2.class);
 				//Intent intent = new Intent(RegisterActivity.this, MainScreenActivity.class);
 				//startActivity(intent);
-				new CallApi().execute();
+				if(pass1Text.getText().toString().equals( pass2Text.getText().toString())){
+					String uri2 = "@drawable/green_exc";
+		            int imageResource = getResources().getIdentifier(uri2, null, getPackageName());
+
+		             ImageView imageview2= (ImageView)findViewById(R.id.excimagepass2);
+		             Drawable res = getResources().getDrawable(imageResource);
+		             imageview2.setImageDrawable(res); 
+				}
+				else{
+					String uri2 = "@drawable/red_exc";
+		            int imageResource = getResources().getIdentifier(uri2, null, getPackageName());
+
+		             ImageView imageview2= (ImageView)findViewById(R.id.excimagepass2);
+		             Drawable res = getResources().getDrawable(imageResource);
+		             imageview2.setImageDrawable(res); 
+				}
+				if(validBoolean==true && identicalBoolean==true){
+					new CallApi().execute();
+				}
+				else{
+					Toast.makeText(getApplicationContext(), "check your exclamation marks", Toast.LENGTH_SHORT).show();
+				}
+				
+				
 			}
 		});
 		
@@ -124,7 +241,7 @@ class CallApi extends AsyncTask<Void, Void, Boolean> {
 				//Log.d("register",jsonstring);
             }
 			else{
-				Toast.makeText(getApplicationContext(), "Register error.Try again!", Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplicationContext(), "check your exclamation marks", Toast.LENGTH_SHORT).show();
 			}
 		}
 

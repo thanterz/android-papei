@@ -29,6 +29,11 @@
             android:text="@string/user"
             android:textSize="20sp" />
         
+        <ImageView 
+	        android:id="@+id/excimageuser"
+	        android:layout_width="20dp"
+	        android:layout_height="20dp"/>
+        
 	    <EditText 
 	        android:id="@+id/userinput"
 	        android:layout_width="match_parent"
@@ -52,6 +57,11 @@
        	    android:layout_alignParentRight="true"
        	    android:text="@string/password"
        	    android:textSize="20sp" />
+       	
+       	<ImageView 
+	        android:id="@+id/excimagepass1"
+	        android:layout_width="20dp"
+	        android:layout_height="20dp"/>
 
     	<EditText 
 	        android:id="@+id/passwordinput1"
@@ -78,6 +88,11 @@
        	    android:layout_alignParentRight="true"
        	    android:text="@string/password"
        	    android:textSize="20sp" />
+       	
+       	<ImageView 
+	        android:id="@+id/excimagepass2"
+	        android:layout_width="20dp"
+	        android:layout_height="20dp"/>
 
     	<EditText 
 	        android:id="@+id/passwordinput2"
@@ -153,12 +168,20 @@
             android:text="@string/email"
             android:textSize="20sp" />
         
+        <ImageView 
+	        android:id="@+id/excimage"
+	        android:layout_width="20dp"
+	        android:layout_height="20dp"/>
+        
 	    <EditText 
 	        android:id="@+id/emailinput"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
+	        android:inputType="textEmailAddress"
 	        android:hint="@string/emailinput"
 	        android:textSize="15sp"	        />
+	    
+	    
 	</LinearLayout>    
 	
 <!--  	<LinearLayout      
