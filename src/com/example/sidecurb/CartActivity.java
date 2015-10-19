@@ -1,11 +1,15 @@
 package com.example.sidecurb;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
 import org.apache.http.HttpEntity;
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -17,6 +21,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.AdapterView.OnItemClickListener;
 
 public class CartActivity extends ActionBarActivity {
 
@@ -27,6 +32,7 @@ public class CartActivity extends ActionBarActivity {
     private int mActivityTitle;
     private HttpEntity json;
 	private int langSelected = -1;
+	private SharedPreferences pref;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +46,12 @@ public class CartActivity extends ActionBarActivity {
         //new CallApi().execute();
         addDrawerItems();
         setupDrawer();
-
+        try {
+			createProductsList();
+		} catch (Throwable e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 	}
@@ -154,5 +165,38 @@ public class CartActivity extends ActionBarActivity {
 		getSupportActionBar().setTitle(R.string.title_activity_cart);
 		invalidateOptionsMenu();
     }
+    
+	private void createProductsList () throws Throwable{
+		CartAdapter adapter = new CartAdapter(this, generateData());
+		 
+	    ListView listView = (ListView) findViewById(R.id.cartList);
+	
+	    listView.setAdapter(adapter);
+	}
+	
+	private ArrayList<Product> generateData() throws JSONException, Throwable{
+		
+		pref = getApplicationContext().getSharedPreferences("MyPref", 0);
+	  	String cart = pref.getString("cart", null);
+		
+	  	JSONArray productsList =  new JSONArray(cart);
+		
+		ArrayList<Product> products = new ArrayList<Product>();
+		
+		for (int i = 0; i < productsList.length(); i++) {
+		    //JSONObject shopList = shopsList.getJSONObject(i);
+		    String id = String.valueOf(i);// productsList.getJSONObject(i).getString("id");
+		    String sku = productsList.getJSONObject(i).getString("sku");
+	        String name = productsList.getJSONObject(i).getString("name");
+	        String url = productsList.getJSONObject(i).getString("url");
+	        String price = productsList.getJSONObject(i).getString("price");
+		    String photo = productsList.getJSONObject(i).getString("photo");
+	        String qnt = productsList.getJSONObject(i).getString("qnt");
+	        
+	        Product prod = new Product(id,sku,name,url,price,"",photo,"","",qnt); 
+	        products.add(prod);
+		}
+	    return products;
+	}
 }
 

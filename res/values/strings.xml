@@ -51,5 +51,6 @@
     <string name="buy">Buy!</string>
     <string name="updatebtn">Update</string>
     <string name="logout">Log Out</string>
+    <string name="mult">x</string>
 
 </resources>

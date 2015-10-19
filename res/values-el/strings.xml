@@ -50,5 +50,6 @@
     <string name="buy">Αγόρασε!</string>
     <string name="updatebtn">Ανανέωση Στοιχείων</string>
     <string name="logout">Έξοδος</string>
+    <string name="mult">x</string>
 
 </resources>

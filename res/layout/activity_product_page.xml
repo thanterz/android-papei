@@ -82,6 +82,7 @@
         	    
 	        	
 			    <EditText 
+			        android:id="@+id/qnt"
 			        android:inputType="number" 
 			        android:layout_width="0dp"
 			        android:layout_height="wrap_content"

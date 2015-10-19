@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="140dp"
+    android:orientation="horizontal" >
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="90dp"
+        android:layout_height="80dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingTop="10dp"
+        android:layout_gravity="center_vertical"
+        android:paddingBottom="10dp"
+        android:src="@drawable/emptycart"/>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="140dp"
+        android:orientation="vertical" >
+		
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="15dp"
+            android:paddingLeft="5dp"
+            android:paddingTop="15dp"
+            android:textColor="#000000"
+            android:textSize="20sp" />
+        
+        	<LinearLayout
+	            android:layout_width="fill_parent"
+	            android:layout_height="60dp"
+	            android:orientation="horizontal" >
+			
+    		    <TextView
+    		        android:id="@+id/price"
+    		        android:layout_width="92dp"
+    		        android:layout_height="wrap_content"
+    		        android:layout_centerVertical="true"
+    		        android:layout_gravity="left"
+    		        android:layout_weight="52.41"
+    		        android:paddingBottom="7dp"
+    		        android:paddingLeft="4dp"
+    		        android:paddingTop="7dp"
+    		        android:textColor="#000000"
+    		        android:textSize="18sp" />
+    		    
+    		    <TextView
+    		        android:id="@+id/sign"
+    		        android:layout_width="30dp"
+    		        android:layout_height="wrap_content"
+    		        android:layout_centerVertical="true"
+    		        android:layout_gravity="left"
+    		        android:paddingBottom="7dp"
+    		        android:paddingLeft="4dp"
+    		        android:paddingTop="7dp"
+    		        android:textColor="#000000"
+        			android:text="@string/mult"
+    		        android:textSize="18sp" />
+    		    
+    		    <EditText 
+			        android:id="@+id/qnt"
+			        android:inputType="number" 
+			        android:layout_width="50dp"
+			        android:layout_height="wrap_content"
+			        android:layout_gravity="left|center_vertical"
+			        android:layout_weight="0.8"
+			        android:ellipsize="end"
+			        android:gravity="left|center_vertical"
+			        android:singleLine="true"
+			        android:hint="1"
+			        android:textSize="22sp" />
+    		    
+    		    <TextView
+    		        android:id="@+id/sum"
+    		        android:layout_width="92dp"
+    		        android:layout_height="wrap_content"
+    		        android:layout_centerVertical="true"
+    		        android:layout_gravity="left"
+    		        android:layout_weight="52.41"
+    		        android:paddingBottom="7dp"
+    		        android:paddingLeft="4dp"
+    		        android:paddingTop="7dp"
+    		        android:textColor="#000000"
+    		        android:textSize="18sp" />
+
+        	</LinearLayout>
+
+		</LinearLayout>
+	
+</LinearLayout>

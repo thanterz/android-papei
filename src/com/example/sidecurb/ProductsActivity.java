@@ -277,7 +277,7 @@ class CallApi extends AsyncTask<Void, Void, Boolean> {
 	        String categ = productsList.getJSONObject(i).getString("categ");
 	        String sid = productsList.getJSONObject(i).getString("sid");
 	        
-	       Product prod = new Product(id,sku,name,url,price,description,photo,categ,sid); 
+	       Product prod = new Product(id,sku,name,url,price,description,photo,categ,sid,"0"); 
 	        products.add(prod);
 		}
 	    return products;
