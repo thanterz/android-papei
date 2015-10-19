@@ -51,5 +51,7 @@
     <string name="updatebtn">Ανανέωση Στοιχείων</string>
     <string name="logout">Έξοδος</string>
     <string name="mult">x</string>
+    <string name="euro">€</string>
+    <string name="sums">Ολοκληρωση Πληρωμης - Συνολο:</string>
 
 </resources>

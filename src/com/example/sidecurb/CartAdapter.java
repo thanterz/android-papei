@@ -5,12 +5,14 @@ import java.util.ArrayList;
 
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -18,7 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
  
 public class CartAdapter extends ArrayAdapter<Product> {
- 
+
         private final Context context;
         private final ArrayList<Product> productsArrayList;
  
@@ -31,7 +33,7 @@ public class CartAdapter extends ArrayAdapter<Product> {
         }
  
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView( final int position, View convertView, ViewGroup parent) {
  
             // 1. Create inflater 
             LayoutInflater inflater = (LayoutInflater) context
@@ -56,6 +58,15 @@ public class CartAdapter extends ArrayAdapter<Product> {
             
             ImageView imageView  = (ImageView) rowView.findViewById(R.id.image);
             new DownloadImageTask(imageView).execute(productsArrayList.get(position).getPhoto());
+            
+            ImageView imageDlt  = (ImageView) rowView.findViewById(R.id.dlt);
+            imageDlt.setOnClickListener(new OnClickListener() {
+            	
+                @Override
+                public void onClick(View v) {
+                	//Product s = productsArrayList.remove(position);   
+                }
+            });
             
             return rowView;
         }
