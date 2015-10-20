@@ -189,12 +189,13 @@ public class MainScreenActivity extends ActionBarActivity {
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			// TODO: attempt authentication against a network service.
-			HttpClient httpclient = new DefaultHttpClient();
+			//HttpClient httpclient = new DefaultHttpClient();
+			HttpClient httpClient = DefaultHttp.getInstance();
 			HttpGet httpget = new HttpGet("http://www.theama.info/curbweb/api/api/nearby/lat/"+lat+"/lng/"+lon+"/?format=json");
 			HttpEntity httpEntity = null;
             HttpResponse response = null;
 			try {
-				response = httpclient.execute(httpget);
+				response = httpClient.execute(httpget);
 			} catch (ClientProtocolException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();

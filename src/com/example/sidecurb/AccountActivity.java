@@ -2,6 +2,7 @@ package com.example.sidecurb;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.CookieStore;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -15,9 +16,17 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.protocol.ClientContext;
+import org.apache.http.cookie.Cookie;
+import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.cookie.BasicClientCookie;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import com.example.sidecurb.RegisterActivity.CallApi;
 
@@ -34,6 +43,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -48,6 +58,8 @@ public class AccountActivity extends ActionBarActivity {
 	private String jsonstring;
 	private int langSelected = -1;
 	private String cr;
+	private String mykey;
+	private String sessionString;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +75,8 @@ public class AccountActivity extends ActionBarActivity {
         setupDrawer();
         SharedPreferences shared = getSharedPreferences("MyPref", 0);
         cr = (shared.getString("csrftoken", ""));
+        mykey = (shared.getString("key", ""));
+        sessionString = (shared.getString("session", ""));
         new CallApi().execute();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -183,11 +197,13 @@ class CallApi extends AsyncTask<Void, Void, Boolean> {
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			// TODO: attempt authentication against a network service.
-			HttpClient httpclient = new DefaultHttpClient();
-			HttpGet httpget = new HttpGet("http://www.theama.info/curbweb/api/accounts/3");
-			httpget.addHeader("x-CSRFToken","42dd594fe7dd9530e5ec8e6d211871130d9abc90");
-			httpget.addHeader("Cookie","csrftoken="+cr);
-			//httpget.addHeader("Cookie","sessionid=42dd594fe7dd9530e5ec8e6d211871130d9abc90");
+			HttpClient httpclient = DefaultHttp.getInstance();
+			HttpGet httpget = new HttpGet("http://www.theama.info/curbweb/user/?format=json");
+			httpget.setHeader("Authorization","Token "+ mykey);
+			httpget.setHeader("Content-Type", "application/json");
+			httpget.setHeader("X-CSRFToken",cr);
+			httpget.setHeader("Cookie","csrftoken="+cr);
+			httpget.setHeader("Cookie","sessionid="+sessionString);
 			HttpEntity httpEntity = null;
             HttpResponse response = null;
 			try {
@@ -215,10 +231,7 @@ class CallApi extends AsyncTask<Void, Void, Boolean> {
 			}
             
             return null;
-
-
 		}
-		
 
 		@Override
 		protected void onPostExecute(final Boolean success) {
@@ -226,6 +239,31 @@ class CallApi extends AsyncTask<Void, Void, Boolean> {
 				//Intent intent = new Intent(AccountActivity.this, MainScreenActivity.class);
 			    //startActivity(intent);
 				Log.d("register",json);
+				String username = null;
+				String email = null;
+				String fname = null;
+				String lname = null;
+				json = "[" + json + "]";
+				JSONArray dataList;
+				try {
+					dataList = new JSONArray(json);
+					username = dataList.getJSONObject(0).getString("username");
+					email = dataList.getJSONObject(0).getString("email");
+					fname = dataList.getJSONObject(0).getString("first_name");
+					lname = dataList.getJSONObject(0).getString("last_name");
+					EditText editText1 = (EditText)findViewById(R.id.userinput);
+					editText1.setText(username);
+					EditText editText2 = (EditText)findViewById(R.id.emailinput);
+					editText2.setText(email);
+					EditText editText3 = (EditText)findViewById(R.id.nameinput);
+					editText3.setText(fname);
+					EditText editText4 = (EditText)findViewById(R.id.surnameinput);
+					editText4.setText(lname);
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				    
             }
 			else{
 				Toast.makeText(getApplicationContext(), "Register error.Try again!", Toast.LENGTH_SHORT).show();
