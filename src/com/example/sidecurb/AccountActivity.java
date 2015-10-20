@@ -13,14 +13,18 @@ import org.apache.http.ParseException;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.cookie.Cookie;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
 
 import com.example.sidecurb.RegisterActivity.CallApi;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -31,6 +35,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -41,9 +46,14 @@ public class AccountActivity extends ActionBarActivity {
     private DrawerAdapter mAdapter;
 	private ActionBarDrawerToggle mDrawerToggle;
     private int mActivityTitle;
-    private HttpEntity json;
+    private String json;
 	private String jsonstring;
 	private int langSelected = -1;
+	private SharedPreferences pref;
+	private String username = null;
+	private String email = null;
+	private String fname = null;
+	private String lname = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -54,10 +64,9 @@ public class AccountActivity extends ActionBarActivity {
 	 	mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         mActivityTitle = R.string.title_activity_account;
         getSupportActionBar().setTitle(mActivityTitle);
-        //new CallApi().execute();
         addDrawerItems();
         setupDrawer();
-        //new CallApi().execute();
+        new CallApi().execute();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 	}
@@ -172,22 +181,20 @@ public class AccountActivity extends ActionBarActivity {
 		invalidateOptionsMenu();
     }
     
-/*class CallApi extends AsyncTask<Void, Void, Boolean> {
+class CallApi extends AsyncTask<Void, Void, Boolean> {
 		
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			// TODO: attempt authentication against a network service.
+			pref = getApplicationContext().getSharedPreferences("MyPref", 0);
+			String key = pref.getString("key", null);
 			HttpClient httpclient = new DefaultHttpClient();
-			HttpPost httppost = new HttpPost("http://www.theama.info/curbweb/rest-auth/registration/");
-			try {
-				httppost.setEntity(new UrlEncodedFormEntity(nameValuePair));
-			} catch (UnsupportedEncodingException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-            HttpResponse response = null;
+			HttpGet httppost = new HttpGet("http://www.theama.info/curbweb/user/?format=json");
+			httppost.setHeader("Authorization", "Token "+key);
+			HttpResponse response = null;
 			try {
 				response = httpclient.execute(httppost);
+				//cookies = cookieStore.getCookies();
 			} catch (ClientProtocolException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -196,8 +203,8 @@ public class AccountActivity extends ActionBarActivity {
 				e1.printStackTrace();
 			}
             try {
-				jsonstring = EntityUtils.toString(response.getEntity());
-				if(jsonstring.indexOf("key")>-1){
+				json = EntityUtils.toString(response.getEntity());
+				if(json.indexOf("id")>-1){
 					return true;
 				}
 				else{
@@ -219,15 +226,16 @@ public class AccountActivity extends ActionBarActivity {
 		@Override
 		protected void onPostExecute(final Boolean success) {
 			if(success.equals(true)){
-				Intent intent = new Intent(RegisterActivity.this, MainScreenActivity.class);
-			    startActivity(intent);
-				//Log.d("register",jsonstring);
+				json = "[" + json + "]";
+			    JSONArray dataList;
+			    
+				Toast.makeText(getApplicationContext(), "ok", Toast.LENGTH_SHORT).show();
             }
 			else{
-				Toast.makeText(getApplicationContext(), "Register error.Try again!", Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplicationContext(), "Login error.Try again!", Toast.LENGTH_SHORT).show();
 			}
 		}
 
-	}*/
+	}
 }
 

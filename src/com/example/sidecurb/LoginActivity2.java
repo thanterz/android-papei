@@ -49,8 +49,11 @@ public class LoginActivity2 extends ActionBarActivity {
 	private Button loginbtn;
 	private int langSelected = -1;
 	private int mActivityTitle;
+	static HttpClient httpclient;
 	private String json;
-	private Cookie cook; 
+	private Cookie cook1; 
+
+	private Cookie cook2; 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		if(langSelected==-1)	
@@ -76,7 +79,7 @@ public class LoginActivity2 extends ActionBarActivity {
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			// TODO: attempt authentication against a network service.
-			HttpClient httpclient = new DefaultHttpClient();
+			httpclient = new DefaultHttpClient();
 			HttpPost httppost = new HttpPost("http://www.theama.info/curbweb/rest-auth/login/");
 			List<NameValuePair> nameValuePair = new ArrayList<NameValuePair>(2);
 			nameValuePair.add(new BasicNameValuePair("username", emailString.getText().toString()));
@@ -104,7 +107,8 @@ public class LoginActivity2 extends ActionBarActivity {
 				e1.printStackTrace();
 			}
             try {
-            	cook = cookies.get(0);
+            	cook1 = cookies.get(0);
+            	cook2 = cookies.get(1);
 				json = EntityUtils.toString(response.getEntity());
 				if(json.indexOf("key")>-1){
 					return true;
@@ -139,7 +143,8 @@ public class LoginActivity2 extends ActionBarActivity {
 					Editor editor = pref.edit();
 					editor.putString("key", key);
 					editor.putString("cart", "[]");
-					editor.putString("csrftoken", cook.getValue());
+					editor.putString("csrftoken", cook1.getValue());
+					editor.putString("sessionid", cook2.getValue());
 					editor.commit();
 					Toast.makeText(getApplicationContext(), key, Toast.LENGTH_SHORT).show();
 					Intent intent = new Intent(LoginActivity2.this, MainScreenActivity.class);
