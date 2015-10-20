@@ -79,7 +79,7 @@ public class LoginActivity2 extends ActionBarActivity {
 		protected Boolean doInBackground(Void... params) {
 			// TODO: attempt authentication against a network service.
 			HttpClient httpclient = new DefaultHttpClient();
-			HttpPost httppost = new HttpPost("http://www.theama.info/curbweb/user/");
+			HttpPost httppost = new HttpPost("http://www.theama.info/curbweb/rest-auth/login");
 			List<NameValuePair> nameValuePair = new ArrayList<NameValuePair>(2);
 			nameValuePair.add(new BasicNameValuePair("username", emailString.getText().toString()));
 			nameValuePair.add(new BasicNameValuePair("password", passwordString.getText().toString()));
