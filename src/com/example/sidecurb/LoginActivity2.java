@@ -32,7 +32,6 @@ import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -61,7 +60,6 @@ public class LoginActivity2 extends ActionBarActivity {
         getSupportActionBar().setTitle(mActivityTitle);
 		emailString = (EditText) findViewById(R.id.emailinput);
 		passwordString = (EditText) findViewById(R.id.passwordinput);
-	
 	    loginbtn = (Button) findViewById(R.id.loginbtn);
 	    loginbtn.setOnClickListener(new OnClickListener()
 	    {
@@ -79,7 +77,7 @@ public class LoginActivity2 extends ActionBarActivity {
 		protected Boolean doInBackground(Void... params) {
 			// TODO: attempt authentication against a network service.
 			HttpClient httpclient = new DefaultHttpClient();
-			HttpPost httppost = new HttpPost("http://www.theama.info/curbweb/rest-auth/login");
+			HttpPost httppost = new HttpPost("http://www.theama.info/curbweb/rest-auth/login/");
 			List<NameValuePair> nameValuePair = new ArrayList<NameValuePair>(2);
 			nameValuePair.add(new BasicNameValuePair("username", emailString.getText().toString()));
 			nameValuePair.add(new BasicNameValuePair("password", passwordString.getText().toString()));
