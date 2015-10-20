@@ -13,6 +13,7 @@ import org.apache.http.ParseException;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
@@ -21,12 +22,14 @@ import org.apache.http.util.EntityUtils;
 import com.example.sidecurb.RegisterActivity.CallApi;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -41,9 +44,10 @@ public class AccountActivity extends ActionBarActivity {
     private DrawerAdapter mAdapter;
 	private ActionBarDrawerToggle mDrawerToggle;
     private int mActivityTitle;
-    private HttpEntity json;
+    private String json;
 	private String jsonstring;
 	private int langSelected = -1;
+	private String cr;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +61,9 @@ public class AccountActivity extends ActionBarActivity {
         //new CallApi().execute();
         addDrawerItems();
         setupDrawer();
-        //new CallApi().execute();
+        SharedPreferences shared = getSharedPreferences("MyPref", 0);
+        cr = (shared.getString("csrftoken", ""));
+        new CallApi().execute();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 	}
@@ -172,22 +178,20 @@ public class AccountActivity extends ActionBarActivity {
 		invalidateOptionsMenu();
     }
     
-/*class CallApi extends AsyncTask<Void, Void, Boolean> {
+class CallApi extends AsyncTask<Void, Void, Boolean> {
 		
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			// TODO: attempt authentication against a network service.
 			HttpClient httpclient = new DefaultHttpClient();
-			HttpPost httppost = new HttpPost("http://www.theama.info/curbweb/rest-auth/registration/");
-			try {
-				httppost.setEntity(new UrlEncodedFormEntity(nameValuePair));
-			} catch (UnsupportedEncodingException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			HttpGet httpget = new HttpGet("http://www.theama.info/curbweb/api/accounts/3");
+			httpget.addHeader("x-CSRFToken","42dd594fe7dd9530e5ec8e6d211871130d9abc90");
+			httpget.addHeader("Cookie","csrftoken="+cr);
+			//httpget.addHeader("Cookie","sessionid=42dd594fe7dd9530e5ec8e6d211871130d9abc90");
+			HttpEntity httpEntity = null;
             HttpResponse response = null;
 			try {
-				response = httpclient.execute(httppost);
+				response = httpclient.execute(httpget);
 			} catch (ClientProtocolException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -196,22 +200,22 @@ public class AccountActivity extends ActionBarActivity {
 				e1.printStackTrace();
 			}
             try {
-				jsonstring = EntityUtils.toString(response.getEntity());
-				if(jsonstring.indexOf("key")>-1){
-					return true;
+    			
+            	httpEntity = response.getEntity();
+                try {
+					json = EntityUtils.toString(httpEntity,"UTF-8");
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-				else{
-					return false;
-				}
+				return true;
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
             
             return null;
+
 
 		}
 		
@@ -219,15 +223,15 @@ public class AccountActivity extends ActionBarActivity {
 		@Override
 		protected void onPostExecute(final Boolean success) {
 			if(success.equals(true)){
-				Intent intent = new Intent(RegisterActivity.this, MainScreenActivity.class);
-			    startActivity(intent);
-				//Log.d("register",jsonstring);
+				//Intent intent = new Intent(AccountActivity.this, MainScreenActivity.class);
+			    //startActivity(intent);
+				Log.d("register",json);
             }
 			else{
 				Toast.makeText(getApplicationContext(), "Register error.Try again!", Toast.LENGTH_SHORT).show();
 			}
 		}
 
-	}*/
+	}
 }
 
