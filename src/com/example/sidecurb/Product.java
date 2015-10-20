@@ -10,8 +10,9 @@ public class Product {
 	private String photo;
     private String categ;
     private String sid;
+    private String qnt;
  
-    public Product ( String id, String sku ,String name, String url, String price ,String description, String photo, String categ, String sid) {
+    public Product ( String id, String sku ,String name, String url, String price ,String description, String photo, String categ, String sid, String qnt) {
         super();
         this.id = id;
         this.sku = sku;
@@ -22,6 +23,7 @@ public class Product {
         this.photo = photo;
         this.categ = categ;
         this.sid = sid;
+        this.qnt = qnt;
     }
 
 	public CharSequence getId() {
@@ -69,6 +71,11 @@ public class Product {
 		return this.sid;
 	}
 	
+	public String getQnt() {
+		// TODO Auto-generated method stub
+		return this.qnt;
+	}
+	
 	public void setId(String id) {
 		// TODO Auto-generated method stub
 		this.id		= id;
@@ -112,5 +119,10 @@ public class Product {
 	public void setSid(String sid) {
 		// TODO Auto-generated method stub
 		this.sid	= sid;
+	}
+	
+	public void setQnt(String qnt) {
+		// TODO Auto-generated method stub
+		this.qnt	= qnt;
 	}
 }

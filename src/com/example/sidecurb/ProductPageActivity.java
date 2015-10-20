@@ -3,8 +3,16 @@ package com.example.sidecurb;
 import java.io.InputStream;
 import java.util.Locale;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.example.sidecurb.LoginActivity2.CallApi;
+
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -17,7 +25,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -37,9 +48,13 @@ public class ProductPageActivity extends ActionBarActivity{
 	private String price;
 	private String photo;
 	private String categ;
+	private Button buy;
 	private ProgressBar spinner;
 	private Intent intent;
+	private String cart;
+	private String qnt;
 	private int langSelected = -1;
+	private SharedPreferences pref;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		if(langSelected==-1)	
@@ -70,6 +85,65 @@ public class ProductPageActivity extends ActionBarActivity{
         prodPrice.setText(price);
         ImageView imageView  = (ImageView) findViewById(R.id.image);
         new DownloadImageTask(imageView).execute(photo);
+        buy = (Button) findViewById(R.id.cartbtn);
+	    buy.setOnClickListener(new OnClickListener()
+	    {
+			  public void onClick(View v)
+			  {
+				  	EditText qnt = (EditText)findViewById(R.id.qnt);
+			        String quantity = (String) qnt.getText().toString();
+			        if(quantity.isEmpty() || quantity.equals(null)){
+			        	quantity = "1";
+			        }
+				  	pref = getApplicationContext().getSharedPreferences("MyPref", 0);
+				  	cart = pref.getString("cart", null);
+				  	int flag = -1;
+				  	try {
+				  		JSONArray cartList =  new JSONArray(cart);
+				  		JSONObject prodObj= new JSONObject();
+				  		if(cartList.length() > 0){
+				  			for (int i = 0; i < cartList.length(); i++) {
+				  				String tempUrl = cartList.getJSONObject(i).getString("url");
+				  				if(tempUrl.equals(url)){
+				  					String tempQnt = cartList.getJSONObject(i).getString("qnt");
+				  					int newQnt  = Integer.parseInt(tempQnt) + Integer.parseInt(quantity);
+				  					cartList.getJSONObject(i).put("qnt", ""+newQnt+"");
+				  					flag = i;
+				  				}
+				  			}
+				  			if(flag < 0){
+				  				prodObj.put("sku", sku);
+							  	prodObj.put("name", name);
+							  	prodObj.put("url", url);
+							  	prodObj.put("photo", photo);
+								prodObj.put("price", price);
+								prodObj.put("qnt", quantity);
+								cartList.put(prodObj);
+				  			}
+				  		}
+				  		else{
+					  		prodObj.put("sku", sku);
+						  	prodObj.put("name", name);
+						  	prodObj.put("url", url);
+						  	prodObj.put("photo", photo);
+							prodObj.put("price", price);
+							prodObj.put("qnt", quantity);
+							cartList.put(prodObj);
+				  		}
+						cart = cartList.toString();
+						Editor editor = pref.edit();
+						editor.remove("cart");
+						editor.putString("cart", cart);
+						editor.commit();
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				  	
+				  	
+				  	
+			  }
+	    });
 	}
 	
 	private void addDrawerItems() {

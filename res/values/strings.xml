@@ -51,5 +51,8 @@
     <string name="buy">Buy!</string>
     <string name="updatebtn">Update</string>
     <string name="logout">Log Out</string>
+    <string name="mult">x</string>
+    <string name="sums">Complete Payment - Total:</string>
+    <string name="euro">€</string>
 
 </resources>

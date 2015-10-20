@@ -9,11 +9,17 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.ParseException;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.CookieStore;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.protocol.ClientContext;
+import org.apache.http.cookie.Cookie;
+import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -53,6 +59,7 @@ public class RegisterActivity extends ActionBarActivity {
     private int mActivityTitle;
     private Boolean validBoolean=false;
     private Boolean identicalBoolean = false;
+    private Cookie cook;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		if(langSelected==-1)	
@@ -203,13 +210,17 @@ class CallApi extends AsyncTask<Void, Void, Boolean> {
 			nameValuePair.add(new BasicNameValuePair("password1", pass1Text.getText().toString()));
 			nameValuePair.add(new BasicNameValuePair("password2", pass2Text.getText().toString()));
 			nameValuePair.add(new BasicNameValuePair("email", emailText.getText().toString()));
+			CookieStore cookieStore = new BasicCookieStore();
+			HttpContext context = new BasicHttpContext();
+			context.setAttribute(ClientContext.COOKIE_STORE, cookieStore);
 			try {
 				httppost.setEntity(new UrlEncodedFormEntity(nameValuePair));
 			} catch (UnsupportedEncodingException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-            HttpResponse response = null;
+			HttpResponse response = null;
+            List<Cookie> cookies  = null;
 			try {
 				response = httpclient.execute(httppost);
 			} catch (ClientProtocolException e1) {
@@ -220,6 +231,7 @@ class CallApi extends AsyncTask<Void, Void, Boolean> {
 				e1.printStackTrace();
 			}
             try {
+            	cook = cookies.get(0);
 				jsonstring = EntityUtils.toString(response.getEntity());
 				if(jsonstring.indexOf("key")>-1){
 					return true;
@@ -253,6 +265,8 @@ class CallApi extends AsyncTask<Void, Void, Boolean> {
 					SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
 					Editor editor = pref.edit();
 					editor.putString("key", key);
+					editor.putString("cart", "[]");
+					editor.putString("csrftoken", cook.getValue());
 					editor.commit();
 					Toast.makeText(getApplicationContext(), key, Toast.LENGTH_SHORT).show();
 					Intent intent = new Intent(RegisterActivity.this, MainScreenActivity.class);
