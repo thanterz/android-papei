@@ -54,5 +54,11 @@
     <string name="mult">x</string>
     <string name="sums">Complete Payment - Total:</string>
     <string name="euro">€</string>
+    <string name="retypepass">Retype Password</string>
+    <string name="oldpass">Old Password</string>
+    <string name="newpass">New Password</string>
+    <string name="passReset">Password Reset</string>
+    <string name="accountDetails">Account Details</string>
+    <string name="creditcard">Credit Card</string>
 
 </resources>

@@ -21,11 +21,50 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.sidecurb.AccountActivity" >
 	
+    <LinearLayout
+        android:layout_width="fill_parent"
+    	android:layout_height="60dp"
+    	android:orientation="horizontal"
+    	android:weightSum="3"
+    	android:id="@+id/tabbuttons">
+    <Button
+        android:id="@+id/showaccount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginTop="10sp"
+        android:text="@string/accountDetails" /> 
+        
+    <Button
+        android:id="@+id/showpass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginTop="10sp"
+        android:text="@string/passReset" />
+    
+    <Button
+        android:id="@+id/showcard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginTop="10sp"
+        android:text="@string/creditcard" /> 
+    
+    </LinearLayout>
+     
+    <LinearLayout      
+        android:layout_width="fill_parent"
+    	android:layout_height="wrap_content"
+    	android:orientation="vertical"
+    	android:id="@+id/vlayout"
+    	android:layout_below="@+id/tabbuttons">
     <LinearLayout      
         android:layout_width="fill_parent"
     	android:layout_height="60dp"
     	android:orientation="horizontal"
-    	android:id="@+id/user">
+    	android:id="@+id/user"
+    	>
 	    
         <TextView
             android:id="@+id/labeluser"
@@ -44,38 +83,13 @@
 	        android:textSize="15sp"	        />
 	</LinearLayout>    
 
-    <LinearLayout
-        android:id="@+id/pass"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:orientation="horizontal"
-        android:layout_below="@+id/user" >
-	    
-       	<TextView
-       	    android:id="@+id/labelpass"
-       	    android:layout_width="140dp"
-       	    android:layout_height="wrap_content"
-       	    android:layout_alignParentLeft="true"
-       	    android:layout_alignParentRight="true"
-       	    android:text="@string/password"
-       	    android:textSize="20sp" />
-
-    	<EditText 
-	        android:id="@+id/passwordinput"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:hint="@string/passwordinput"
-	        android:textSize="15sp"
-	        android:inputType="textPassword"
-	        />
-	</LinearLayout>        
     
      <LinearLayout
         android:id="@+id/name"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:orientation="horizontal"
-        android:layout_below="@+id/pass" >
+        android:layout_below="@+id/user" >
 	    
        	<TextView
        	    android:id="@+id/namelabel"
@@ -118,7 +132,7 @@
 	        android:textSize="15sp"
 	        />
 	</LinearLayout>
-	<LinearLayout      
+		<LinearLayout      
         android:layout_width="fill_parent"
     	android:layout_height="60dp"
     	android:orientation="horizontal"
@@ -140,13 +154,124 @@
 	        android:layout_height="wrap_content"
 	        android:hint="@string/emailinput"
 	        android:textSize="15sp"	        />
-	</LinearLayout>    
+	</LinearLayout> 
 	
+    <Button
+        android:id="@+id/updatebtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10sp"
+        android:layout_below="@id/emailinput"
+        android:text="@string/updatebtn" />
+    </LinearLayout>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" 
+    android:id="@+id/passreset"
+    android:layout_below="@+id/tabbuttons"
+    android:visibility="gone" >
+    
+    <LinearLayout
+        android:id="@+id/pass"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:layout_below="@+id/user" >
+	    
+       	<TextView
+       	    android:id="@+id/labelpass"
+       	    android:layout_width="140dp"
+       	    android:layout_height="wrap_content"
+       	    android:layout_alignParentLeft="true"
+       	    android:layout_alignParentRight="true"
+       	    android:text="@string/newpass"
+       	    android:textSize="20sp" />
+
+    	<EditText 
+	        android:id="@+id/passwordinput"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:hint="@string/newpass"
+	        android:textSize="15sp"
+	        android:inputType="textPassword"
+	        />
+    	
+    	</LinearLayout>
+    	
+    <LinearLayout
+        android:id="@+id/pass2"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:layout_below="@+id/pass" >
+	    
+       	<TextView
+       	    android:id="@+id/labelpass2"
+       	    android:layout_width="140dp"
+       	    android:layout_height="wrap_content"
+       	    android:layout_alignParentLeft="true"
+       	    android:layout_alignParentRight="true"
+       	    android:text="@string/retypepass"
+       	    android:textSize="20sp" />
+
+    	<EditText 
+	        android:id="@+id/passwordinput2"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:hint="@string/retypepass"
+	        android:textSize="15sp"
+	        android:inputType="textPassword"
+	        />
+    	
+    	</LinearLayout>
+    	
+    <LinearLayout
+        android:id="@+id/oldpass"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:layout_below="@+id/pass2" >
+	    
+       	<TextView
+       	    android:id="@+id/labeloldpass"
+       	    android:layout_width="140dp"
+       	    android:layout_height="wrap_content"
+       	    android:layout_alignParentLeft="true"
+       	    android:layout_alignParentRight="true"
+       	    android:text="@string/oldpass"
+       	    android:textSize="20sp" />
+
+    	<EditText 
+	        android:id="@+id/oldpasswordinput"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:hint="@string/oldpass"
+	        android:textSize="15sp"
+	        android:inputType="textPassword"
+	        />
+    	
+    	</LinearLayout>
+    	<Button
+        android:id="@+id/updatepassbtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10sp"
+        android:layout_below="@id/oldpasswordinput"
+        android:text="@string/updatebtn" />
+
+</LinearLayout>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" 
+    android:id="@+id/cardlayout"
+    android:layout_below="@id/tabbuttons"
+    android:visibility="gone" >
 	<LinearLayout      
         android:layout_width="fill_parent"
     	android:layout_height="60dp"
-    	android:orientation="horizontal"
-        android:layout_below="@+id/mail" 
+    	android:orientation="horizontal" 
     	android:id="@+id/tel">
 	    
         <TextView
@@ -189,15 +314,19 @@
 	        android:hint="@string/cardinput"
 	        android:textSize="15sp"	        />
 	</LinearLayout>
-    <Button
-        android:id="@+id/updatebtn"
+	<Button
+        android:id="@+id/updatecardbtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10sp"
-        android:layout_below="@id/card"
+        android:layout_below="@id/cardinput"
         android:text="@string/updatebtn" />
-
+	</LinearLayout>
 </RelativeLayout>
+
+    
+    
+    
 </ScrollView>
     
     <!-- Side navigation drawer UI -->

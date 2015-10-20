@@ -42,9 +42,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 public class AccountActivity extends ActionBarActivity {
@@ -66,18 +70,78 @@ public class AccountActivity extends ActionBarActivity {
 		if(langSelected==-1)	
 			super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_account);
-	 	mDrawerList = (ListView)findViewById(R.id.navList);
+	 	
+		final LinearLayout ln = (LinearLayout)findViewById(R.id.passreset);
+		final LinearLayout mainln = (LinearLayout)findViewById(R.id.vlayout);
+		final LinearLayout cardln = (LinearLayout)findViewById(R.id.cardlayout);
+		
+		Button showaccountButton = (Button)findViewById(R.id.showaccount);
+		Button showpassButton = (Button)findViewById(R.id.showpass);
+		Button showcardButton = (Button)findViewById(R.id.showcard);
+		
+		showpassButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				if(ln.getVisibility()==View.GONE)
+                {
+                    ln.setVisibility(View.VISIBLE);
+
+                }
+               mainln.setVisibility(View.GONE);
+               cardln.setVisibility(View.GONE);
+				
+			}
+		});
+		
+		showaccountButton.setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						// TODO Auto-generated method stub
+						if(mainln.getVisibility()==View.GONE)
+		                {
+		                    mainln.setVisibility(View.VISIBLE);
+		
+		                }
+		               ln.setVisibility(View.GONE);
+		               cardln.setVisibility(View.GONE);
+						
+					}
+		});
+		
+		showcardButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				if(cardln.getVisibility()==View.GONE)
+                {
+                    cardln.setVisibility(View.VISIBLE);
+
+                }
+               ln.setVisibility(View.GONE);
+               mainln.setVisibility(View.GONE);
+				
+			}
+});
+		
+		mDrawerList = (ListView)findViewById(R.id.navList);
 	 	mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         mActivityTitle = R.string.title_activity_account;
         getSupportActionBar().setTitle(mActivityTitle);
         //new CallApi().execute();
         addDrawerItems();
         setupDrawer();
+        
         SharedPreferences shared = getSharedPreferences("MyPref", 0);
         cr = (shared.getString("csrftoken", ""));
         mykey = (shared.getString("key", ""));
         sessionString = (shared.getString("session", ""));
+        
         new CallApi().execute();
+        
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 	}
