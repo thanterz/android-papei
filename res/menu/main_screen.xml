@@ -12,5 +12,9 @@
           android:title="@string/greek"
           android:orderInCategory="100"
           app:showAsAction="never"/>
+    <item android:id="@+id/speak"
+          android:title="@string/speak"
+          android:orderInCategory="100"
+          app:showAsAction="never"/>
     
 </menu>

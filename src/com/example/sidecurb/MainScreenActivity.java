@@ -14,6 +14,8 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
+
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -25,8 +27,11 @@ import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -36,8 +41,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainScreenActivity extends ActionBarActivity {
@@ -58,6 +66,12 @@ public class MainScreenActivity extends ActionBarActivity {
 	private float mAccel; // acceleration apart from gravity
 	private float mAccelCurrent; // current acceleration including gravity
 	private float mAccelLast; // last acceleration including gravity
+	private static final int REQUEST_CODE = 1234;
+	Button Start;
+	TextView Speech;
+	Dialog match_text_dialog;
+	ListView textlist;
+	ArrayList<String> matches_text;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		if(langSelected==-1)	
@@ -174,6 +188,9 @@ public class MainScreenActivity extends ActionBarActivity {
         }
         else if(id == R.id.greek){
         	updateconfig("el");
+        }
+        else if(id == R.id.speak){
+        	speak();
         }
 
         // Activate the navigation drawer toggle
@@ -345,6 +362,65 @@ public class MainScreenActivity extends ActionBarActivity {
 		onCreate(tempBundle);
 		getSupportActionBar().setTitle(R.string.title_activity_main_screen);
 		invalidateOptionsMenu();
+    }
+    
+    public void speak(){
+    	if(isConnected()){
+            Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+            RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "en-US");
+            startActivityForResult(intent, REQUEST_CODE);
+    	}
+    	else{
+            Toast.makeText(getApplicationContext(), "Plese Connect to Internet", Toast.LENGTH_LONG).show();
+        }
+    }
+    
+    public  boolean isConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo net = cm.getActiveNetworkInfo();
+        if (net!=null && net.isAvailable() && net.isConnected()) {
+        	return true;
+        } 
+        else {
+        	return false;
+        }
+    }
+    
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    	if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
+    		matches_text = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+    		String command;
+    		for(int i = 0; i < matches_text.size();i++){
+    			command = matches_text.get(i);
+    			if(command.equalsIgnoreCase("Cart")){
+    				Intent intent = new Intent(MainScreenActivity.this, CartActivity.class);
+    				startActivity(intent);
+    			}
+    			else if(command.equalsIgnoreCase("stores")){
+    				Intent intent = new Intent(MainScreenActivity.this, MainScreenActivity.class);
+    				startActivity(intent);
+    			}
+    			else if(command.equalsIgnoreCase("account")){
+    				Intent intent = new Intent(MainScreenActivity.this, AccountActivity.class);
+    				startActivity(intent);
+    			}
+    			else if(command.equalsIgnoreCase("frequently asked questions")){
+    				Intent intent = new Intent(MainScreenActivity.this, FAQActivity.class);
+    				startActivity(intent);
+    			}
+    			else if(command.equalsIgnoreCase("exit") || command.equalsIgnoreCase("log out")){
+    				Intent intent = new Intent(MainScreenActivity.this, MainActivity.class);
+    				startActivity(intent);
+            	}
+    		}
+    	}
+    	else{
+    		Toast.makeText(getApplicationContext(), "failed", Toast.LENGTH_SHORT).show();
+    	}
+    	super.onActivityResult(requestCode, resultCode, data);
     }
     
     private final SensorEventListener mSensorListener = new SensorEventListener() {

@@ -67,5 +67,6 @@
     <string name="detailsTitle"><u>Delivery Details</u></string>
     <string name="complete">Complete Order</string>
     <string name="alertcart">There is a pending cart from another shop.Do you want to delete it?</string>
+    <string name="speak">Voice Recognition</string>
 
 </resources>
