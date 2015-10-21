@@ -5,11 +5,15 @@ import java.util.ArrayList;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.text.Editable;
+import android.text.method.KeyListener;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -49,8 +53,21 @@ public class CartAdapter extends ArrayAdapter<Product> {
             TextView price = (TextView) rowView.findViewById(R.id.price);
             price.setText(productsArrayList.get(position).getPrice()+"€");
             
-            EditText qnt = (EditText) rowView.findViewById(R.id.qnt);
+            final EditText qnt = (EditText) rowView.findViewById(R.id.qnt);
             qnt.setText(productsArrayList.get(position).getQnt());
+            qnt.setOnKeyListener(new View.OnKeyListener() {
+                public boolean onKey(View v, int keyCode, KeyEvent event) {
+                    // If the event is a key-down event on the "enter" button
+                    if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    	Product s = productsArrayList.get(position); 
+                    	CartActivity.recalculate(v, productsArrayList, s, position,qnt.getText().toString());
+                    	Intent intent = new Intent(context, CartActivity.class);
+                        context.startActivity(intent)  ;
+                        return true;
+                    }
+                    return false;
+                }
+            });
             
             TextView sum = (TextView) rowView.findViewById(R.id.sum);
             Float sums = Float.valueOf(productsArrayList.get(position).getPrice()) * Float.valueOf(productsArrayList.get(position).getQnt());
@@ -64,7 +81,10 @@ public class CartAdapter extends ArrayAdapter<Product> {
             	
                 @Override
                 public void onClick(View v) {
-                	//Product s = productsArrayList.remove(position);   
+                	Product s = productsArrayList.get(position); 
+                	CartActivity.remove(v, productsArrayList, s, position);  
+                	Intent intent = new Intent(context, CartActivity.class);
+                    context.startActivity(intent)  ;
                 }
             });
             
