@@ -16,6 +16,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.protocol.ClientContext;
 import org.apache.http.cookie.Cookie;
 import org.apache.http.impl.client.BasicCookieStore;
@@ -60,10 +61,15 @@ public class AccountActivity extends ActionBarActivity {
     private int mActivityTitle;
     private String json;
 	private String jsonstring;
+	private String json2;
 	private int langSelected = -1;
 	private String cr;
 	private String mykey;
 	private String sessionString;
+	private EditText editText1;
+	private EditText editText2;
+	private EditText editText3;
+	private EditText editText4;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +84,7 @@ public class AccountActivity extends ActionBarActivity {
 		Button showaccountButton = (Button)findViewById(R.id.showaccount);
 		Button showpassButton = (Button)findViewById(R.id.showpass);
 		Button showcardButton = (Button)findViewById(R.id.showcard);
+		Button updateDataButton = (Button)findViewById(R.id.updatebtn);
 		
 		showpassButton.setOnClickListener(new OnClickListener() {
 			
@@ -125,7 +132,16 @@ public class AccountActivity extends ActionBarActivity {
                mainln.setVisibility(View.GONE);
 				
 			}
-});
+		});
+		
+		updateDataButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				new UpdateAccountApi().execute();
+			}
+		});
 		
 		mDrawerList = (ListView)findViewById(R.id.navList);
 	 	mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
@@ -315,13 +331,13 @@ class CallApi extends AsyncTask<Void, Void, Boolean> {
 					email = dataList.getJSONObject(0).getString("email");
 					fname = dataList.getJSONObject(0).getString("first_name");
 					lname = dataList.getJSONObject(0).getString("last_name");
-					EditText editText1 = (EditText)findViewById(R.id.userinput);
+					editText1 = (EditText)findViewById(R.id.userinput);
 					editText1.setText(username);
-					EditText editText2 = (EditText)findViewById(R.id.emailinput);
+					editText2 = (EditText)findViewById(R.id.emailinput);
 					editText2.setText(email);
-					EditText editText3 = (EditText)findViewById(R.id.nameinput);
+					editText3 = (EditText)findViewById(R.id.nameinput);
 					editText3.setText(fname);
-					EditText editText4 = (EditText)findViewById(R.id.surnameinput);
+					editText4 = (EditText)findViewById(R.id.surnameinput);
 					editText4.setText(lname);
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
@@ -335,5 +351,81 @@ class CallApi extends AsyncTask<Void, Void, Boolean> {
 		}
 
 	}
+
+class UpdateAccountApi extends AsyncTask<Void, Void, Boolean> {
+	
+	@Override
+	protected Boolean doInBackground(Void... params) {
+		// TODO: attempt authentication against a network service.
+		HttpClient httpputclient = new DefaultHttpClient();
+		HttpPut httpput = new HttpPut("http://www.theama.info/curbweb/user/?format=json");
+		httpput.setHeader("Authorization","Token "+ mykey);
+		//httpput.setHeader("Content-Type", "application/json");
+		httpput.setHeader("X-CSRFToken",cr);
+		httpput.setHeader("Cookie","csrftoken="+cr);
+		httpput.setHeader("Cookie","sessionid="+sessionString);
+		List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(4);
+		EditText editTextName = (EditText)findViewById(R.id.nameinput);
+		Log.d("newname", editTextName.getText().toString());
+		nameValuePairs.add(new BasicNameValuePair("username", editText1.getText().toString()));
+		nameValuePairs.add(new BasicNameValuePair("email", editText2.getText().toString()));
+		nameValuePairs.add(new BasicNameValuePair("first_name", editTextName.getText().toString()));
+		nameValuePairs.add(new BasicNameValuePair("last_name", editText4.getText().toString()));
+		try {
+			httpput.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+		} catch (UnsupportedEncodingException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+        HttpResponse response2 = null;
+		try {
+			response2 = httpputclient.execute(httpput);
+			
+		} catch (ClientProtocolException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+        try {
+			json2 = EntityUtils.toString(response2.getEntity());
+			//if(json2.indexOf("username")>-1){
+				return true;
+			//}
+			//else{
+			//	return false;
+			//}
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+        return null;
+	}
+
+	@Override
+	protected void onPostExecute(final Boolean success) {
+		if(success.equals(true)){
+			//Intent intent = new Intent(AccountActivity.this, MainScreenActivity.class);
+		    //startActivity(intent);
+			try {
+				Toast.makeText(getApplicationContext(), "Update successful!", Toast.LENGTH_SHORT).show();
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+			
+        }
+		else{
+			Toast.makeText(getApplicationContext(), "Register error.Try again!", Toast.LENGTH_SHORT).show();
+		}
+	}
+
+}
 }
 
