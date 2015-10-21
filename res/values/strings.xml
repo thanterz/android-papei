@@ -60,5 +60,7 @@
     <string name="passReset">Password Reset</string>
     <string name="accountDetails">Account Details</string>
     <string name="creditcard">Credit Card</string>
+    <string name="emailpass">Email</string>
+    <string name="emailpassbtn">Send Email</string>
 
 </resources>
