@@ -28,6 +28,7 @@ import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.support.v7.app.ActionBarActivity;
 import android.content.Intent;
@@ -116,16 +117,22 @@ public class LoginActivity2 extends ActionBarActivity {
             	cook2 = cookies.get(1);
             	
 				json = EntityUtils.toString(response.getEntity());
-				if(json.indexOf("key")>-1){
+				JSONObject object = new JSONObject(json);
+				Log.d("object string", object.toString());
+				if(object.has("key")){
 					return true;
 				}
-				else{
+				else {
+					
 					return false;
 				}
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
