@@ -28,6 +28,7 @@ import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.example.sidecurb.RegisterActivity.CallApi;
 
@@ -139,8 +140,10 @@ public class AccountActivity extends ActionBarActivity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				
 				new UpdateAccountApi().execute();
 			}
+		
 		});
 		
 		mDrawerList = (ListView)findViewById(R.id.navList);
@@ -318,7 +321,6 @@ class CallApi extends AsyncTask<Void, Void, Boolean> {
 			if(success.equals(true)){
 				//Intent intent = new Intent(AccountActivity.this, MainScreenActivity.class);
 			    //startActivity(intent);
-				Log.d("register",json);
 				String username = null;
 				String email = null;
 				String fname = null;
@@ -354,6 +356,8 @@ class CallApi extends AsyncTask<Void, Void, Boolean> {
 
 class UpdateAccountApi extends AsyncTask<Void, Void, Boolean> {
 	
+	private String uname;
+
 	@Override
 	protected Boolean doInBackground(Void... params) {
 		// TODO: attempt authentication against a network service.
@@ -366,7 +370,6 @@ class UpdateAccountApi extends AsyncTask<Void, Void, Boolean> {
 		httpput.setHeader("Cookie","sessionid="+sessionString);
 		List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(4);
 		EditText editTextName = (EditText)findViewById(R.id.nameinput);
-		Log.d("newname", editTextName.getText().toString());
 		nameValuePairs.add(new BasicNameValuePair("username", editText1.getText().toString()));
 		nameValuePairs.add(new BasicNameValuePair("email", editText2.getText().toString()));
 		nameValuePairs.add(new BasicNameValuePair("first_name", editTextName.getText().toString()));
@@ -391,16 +394,22 @@ class UpdateAccountApi extends AsyncTask<Void, Void, Boolean> {
 		
         try {
 			json2 = EntityUtils.toString(response2.getEntity());
-			//if(json2.indexOf("username")>-1){
-				return true;
-			//}
-			//else{
+			
+			JSONObject object = new JSONObject(json2);
+			//if(object.isNull("username")){
 			//	return false;
 			//}
+			//else{
+				return true;
+			//}
+			
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -418,8 +427,7 @@ class UpdateAccountApi extends AsyncTask<Void, Void, Boolean> {
 			} catch (Exception e) {
 				// TODO: handle exception
 				e.printStackTrace();
-			}
-			
+			}	
         }
 		else{
 			Toast.makeText(getApplicationContext(), "Register error.Try again!", Toast.LENGTH_SHORT).show();
