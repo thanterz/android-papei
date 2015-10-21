@@ -54,10 +54,9 @@ public class LoginActivity2 extends ActionBarActivity {
 	private Button loginbtn;
 	private int langSelected = -1;
 	private int mActivityTitle;
-	static HttpClient httpclient;
 	private String json,json2;
-	private Cookie cook1; 
-	private Cookie cook2; 
+	private Cookie cook; 
+	private Cookie cook2;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		if(langSelected==-1)	
@@ -84,7 +83,7 @@ public class LoginActivity2 extends ActionBarActivity {
 		protected Boolean doInBackground(Void... params) {
 			// TODO: attempt authentication against a network service.
 		    HttpClient httpClient=DefaultHttp.getInstance();
-			HttpPost httppost = new HttpPost("http://www.theama.info/curbweb/rest-auth/login/");
+			HttpPost httppost = new HttpPost("http://www.theama.info/curbweb/rest-auth/login/?format=json");
 			List<NameValuePair> nameValuePair = new ArrayList<NameValuePair>(2);
 			nameValuePair.add(new BasicNameValuePair("username", emailString.getText().toString()));
 			nameValuePair.add(new BasicNameValuePair("password", passwordString.getText().toString()));
@@ -113,10 +112,10 @@ public class LoginActivity2 extends ActionBarActivity {
 			}
 			
             try {
-            	cook1 = cookies.get(0);
-            	cook2 = cookies.get(1);
-            	cook2 = cookies.get(1);
-            	
+            	if(cookies.size() >= 2){
+            		cook = cookies.get(0);
+            		cook2 = cookies.get(1);
+            	}
 				json = EntityUtils.toString(response.getEntity());
 				if(json.indexOf("key")>-1){
 					return true;
@@ -151,8 +150,7 @@ public class LoginActivity2 extends ActionBarActivity {
 					Editor editor = pref.edit();
 					editor.putString("key", key);
 					editor.putString("cart", "[]");
-					editor.putString("csrftoken", cook1.getValue());
-					editor.putString("sessionid", cook2.getValue());
+					editor.putString("csrftoken", cook.getValue());
 					editor.putString("sessionid", cook2.getValue());
 					editor.commit();
 					//Toast.makeText(getApplicationContext(), key, Toast.LENGTH_SHORT).show();
