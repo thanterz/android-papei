@@ -2,6 +2,7 @@ package com.example.sidecurb;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.CookieStore;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -15,11 +16,17 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.protocol.ClientContext;
 import org.apache.http.cookie.Cookie;
+import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.cookie.BasicClientCookie;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
+import org.json.JSONException;
 
 import com.example.sidecurb.RegisterActivity.CallApi;
 
@@ -31,6 +38,7 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -49,11 +57,9 @@ public class AccountActivity extends ActionBarActivity {
     private String json;
 	private String jsonstring;
 	private int langSelected = -1;
-	private SharedPreferences pref;
-	private String username = null;
-	private String email = null;
-	private String fname = null;
-	private String lname = null;
+	private String cr;
+	private String mykey;
+	private String sessionString;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -64,8 +70,13 @@ public class AccountActivity extends ActionBarActivity {
 	 	mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         mActivityTitle = R.string.title_activity_account;
         getSupportActionBar().setTitle(mActivityTitle);
+        //new CallApi().execute();
         addDrawerItems();
         setupDrawer();
+        SharedPreferences shared = getSharedPreferences("MyPref", 0);
+        cr = (shared.getString("csrftoken", ""));
+        mykey = (shared.getString("key", ""));
+        sessionString = (shared.getString("session", ""));
         new CallApi().execute();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -186,15 +197,17 @@ class CallApi extends AsyncTask<Void, Void, Boolean> {
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			// TODO: attempt authentication against a network service.
-			pref = getApplicationContext().getSharedPreferences("MyPref", 0);
-			String key = pref.getString("key", null);
-			HttpClient httpclient = new DefaultHttpClient();
-			HttpGet httppost = new HttpGet("http://www.theama.info/curbweb/user/?format=json");
-			httppost.setHeader("Authorization", "Token "+key);
-			HttpResponse response = null;
+			HttpClient httpclient = DefaultHttp.getInstance();
+			HttpGet httpget = new HttpGet("http://www.theama.info/curbweb/user/?format=json");
+			httpget.setHeader("Authorization","Token "+ mykey);
+			httpget.setHeader("Content-Type", "application/json");
+			httpget.setHeader("X-CSRFToken",cr);
+			httpget.setHeader("Cookie","csrftoken="+cr);
+			httpget.setHeader("Cookie","sessionid="+sessionString);
+			HttpEntity httpEntity = null;
+            HttpResponse response = null;
 			try {
-				response = httpclient.execute(httppost);
-				//cookies = cookieStore.getCookies();
+				response = httpclient.execute(httpget);
 			} catch (ClientProtocolException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -203,36 +216,57 @@ class CallApi extends AsyncTask<Void, Void, Boolean> {
 				e1.printStackTrace();
 			}
             try {
-				json = EntityUtils.toString(response.getEntity());
-				if(json.indexOf("id")>-1){
-					return true;
+    			
+            	httpEntity = response.getEntity();
+                try {
+					json = EntityUtils.toString(httpEntity,"UTF-8");
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-				else{
-					return false;
-				}
+				return true;
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
             
             return null;
-
 		}
-		
 
 		@Override
 		protected void onPostExecute(final Boolean success) {
 			if(success.equals(true)){
+				//Intent intent = new Intent(AccountActivity.this, MainScreenActivity.class);
+			    //startActivity(intent);
+				Log.d("register",json);
+				String username = null;
+				String email = null;
+				String fname = null;
+				String lname = null;
 				json = "[" + json + "]";
-			    JSONArray dataList;
-			    
-				Toast.makeText(getApplicationContext(), "ok", Toast.LENGTH_SHORT).show();
+				JSONArray dataList;
+				try {
+					dataList = new JSONArray(json);
+					username = dataList.getJSONObject(0).getString("username");
+					email = dataList.getJSONObject(0).getString("email");
+					fname = dataList.getJSONObject(0).getString("first_name");
+					lname = dataList.getJSONObject(0).getString("last_name");
+					EditText editText1 = (EditText)findViewById(R.id.userinput);
+					editText1.setText(username);
+					EditText editText2 = (EditText)findViewById(R.id.emailinput);
+					editText2.setText(email);
+					EditText editText3 = (EditText)findViewById(R.id.nameinput);
+					editText3.setText(fname);
+					EditText editText4 = (EditText)findViewById(R.id.surnameinput);
+					editText4.setText(lname);
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				    
             }
 			else{
-				Toast.makeText(getApplicationContext(), "Login error.Try again!", Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplicationContext(), "Register error.Try again!", Toast.LENGTH_SHORT).show();
 			}
 		}
 

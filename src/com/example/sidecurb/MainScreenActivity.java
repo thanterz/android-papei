@@ -16,6 +16,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -29,6 +30,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -187,12 +189,13 @@ public class MainScreenActivity extends ActionBarActivity {
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			// TODO: attempt authentication against a network service.
-			HttpClient httpclient = new DefaultHttpClient();
+			//HttpClient httpclient = new DefaultHttpClient();
+			HttpClient httpClient = DefaultHttp.getInstance();
 			HttpGet httpget = new HttpGet("http://www.theama.info/curbweb/api/api/nearby/lat/"+lat+"/lng/"+lon+"/?format=json");
 			HttpEntity httpEntity = null;
             HttpResponse response = null;
 			try {
-				response = httpclient.execute(httpget);
+				response = httpClient.execute(httpget);
 			} catch (ClientProtocolException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();

@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import org.apache.http.Header;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.ParseException;
@@ -13,11 +15,13 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.protocol.ClientContext;
 import org.apache.http.cookie.Cookie;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.cookie.BasicClientCookie;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
@@ -32,6 +36,7 @@ import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -50,9 +55,8 @@ public class LoginActivity2 extends ActionBarActivity {
 	private int langSelected = -1;
 	private int mActivityTitle;
 	static HttpClient httpclient;
-	private String json;
+	private String json,json2;
 	private Cookie cook1; 
-
 	private Cookie cook2; 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +83,7 @@ public class LoginActivity2 extends ActionBarActivity {
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			// TODO: attempt authentication against a network service.
-			httpclient = new DefaultHttpClient();
+		    HttpClient httpClient=DefaultHttp.getInstance();
 			HttpPost httppost = new HttpPost("http://www.theama.info/curbweb/rest-auth/login/");
 			List<NameValuePair> nameValuePair = new ArrayList<NameValuePair>(2);
 			nameValuePair.add(new BasicNameValuePair("username", emailString.getText().toString()));
@@ -97,8 +101,9 @@ public class LoginActivity2 extends ActionBarActivity {
             HttpResponse response = null;
             List<Cookie> cookies  = null;
 			try {
-				response = httpclient.execute(httppost, context);
+				response = httpClient.execute(httppost, context);
 				cookies = cookieStore.getCookies();
+				
 			} catch (ClientProtocolException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -106,9 +111,12 @@ public class LoginActivity2 extends ActionBarActivity {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
+			
             try {
             	cook1 = cookies.get(0);
             	cook2 = cookies.get(1);
+            	cook2 = cookies.get(1);
+            	
 				json = EntityUtils.toString(response.getEntity());
 				if(json.indexOf("key")>-1){
 					return true;
@@ -145,8 +153,10 @@ public class LoginActivity2 extends ActionBarActivity {
 					editor.putString("cart", "[]");
 					editor.putString("csrftoken", cook1.getValue());
 					editor.putString("sessionid", cook2.getValue());
+					editor.putString("sessionid", cook2.getValue());
 					editor.commit();
-					Toast.makeText(getApplicationContext(), key, Toast.LENGTH_SHORT).show();
+					//Toast.makeText(getApplicationContext(), key, Toast.LENGTH_SHORT).show();
+					
 					Intent intent = new Intent(LoginActivity2.this, MainScreenActivity.class);
 				    startActivity(intent);
 				} catch (JSONException e) {
