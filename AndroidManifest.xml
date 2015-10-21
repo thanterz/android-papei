@@ -75,7 +75,11 @@
         <activity
             android:name=".ProductPageActivity"
             android:label="@string/title_activity_product_page" >
-        </activity>        
+        </activity>
+        <activity
+            android:name=".SummaryActivity"
+            android:label="@string/title_activity_summary" >
+        </activity>
     </application>
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->

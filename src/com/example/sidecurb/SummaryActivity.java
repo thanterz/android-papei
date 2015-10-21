@@ -1,8 +1,6 @@
 package com.example.sidecurb;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Locale;
 
 import org.apache.http.HttpEntity;
@@ -11,41 +9,28 @@ import org.apache.http.ParseException;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
-
-import com.example.sidecurb.MainScreenActivity.CallApi;
-import com.example.sidecurb.MainScreenActivity.MyLocationListener;
-
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
 
-public class ProductsActivity extends ActionBarActivity {
+public class SummaryActivity extends ActionBarActivity {
 
 	private ListView mDrawerList;
     private DrawerLayout mDrawerLayout;
@@ -53,59 +38,67 @@ public class ProductsActivity extends ActionBarActivity {
 	private ActionBarDrawerToggle mDrawerToggle;
     private int mActivityTitle;
     private String json;
-	private String url;
-	private Intent intent;
 	private ProgressBar spinner;
 	private int langSelected = -1;
+	private String cr;
+	private String mykey;
+	private EditText editText1;
+	private EditText editText2;
+	private EditText editText3;
+	private EditText editText4;
+	private TextView textView1;
+	private Intent intent;
+	private Float sum;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		if(langSelected==-1)	
 			super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_products);
+		setContentView(R.layout.activity_summary);
 		spinner = (ProgressBar)findViewById(R.id.progress);
 		spinner.setVisibility(View.VISIBLE);	
+		
 	 	mDrawerList = (ListView)findViewById(R.id.navList);
 	 	mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
-        mActivityTitle = R.string.title_activity_products;
+        mActivityTitle = R.string.title_activity_summary;
+        intent = getIntent();
+        sum = intent.getFloatExtra("sum", 0);
         getSupportActionBar().setTitle(mActivityTitle);
         addDrawerItems();
         setupDrawer();
-        intent = getIntent();
-        url = intent.getStringExtra("shop");
+        SharedPreferences shared = getSharedPreferences("MyPref", 0);
+        mykey = (shared.getString("key", ""));
         new CallApi().execute();
-        //TextView shopName = (TextView)findViewById(R.id.name);
-        //shopName.setText(name);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 	}
 	
 	private void addDrawerItems() {
-        String[] menuArray = { "Stores", "Categories", "My Cart", "My Account", "FAQ", "Log Out" };
-        mAdapter = new DrawerAdapter(this, menuArray);
+        String[] menuArray = { "Stores", "Categories", "My Cart", "My Account", "FAQ" ,"Log Out"};
+        mAdapter = new DrawerAdapter(SummaryActivity.this, menuArray);
         mDrawerList.setAdapter(mAdapter);
-
+        
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        	@Override
+        	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             	Intent intent ;
             	langSelected = -1;
             	if(position==0){
-            		intent = new Intent(ProductsActivity.this, MainScreenActivity.class);
+            		intent = new Intent(SummaryActivity.this, MainScreenActivity.class);
             	}
             	else if(position == 1){
-            		intent = new Intent(ProductsActivity.this, CategoriesActivity.class);
+            		intent = new Intent(SummaryActivity.this, CategoriesActivity.class);
             	}
             	else if(position == 2){
-            		intent = new Intent(ProductsActivity.this, CartActivity.class);
+            		intent = new Intent(SummaryActivity.this, CartActivity.class);
             	}
             	else if(position == 3){
-            		intent = new Intent(ProductsActivity.this, AccountActivity.class);
+            		intent = new Intent(SummaryActivity.this, AccountActivity.class);
             	}
             	else if(position == 4){
-            		intent = new Intent(ProductsActivity.this, FAQActivity.class);
+            		intent = new Intent(SummaryActivity.this, FAQActivity.class);
             	}
             	else{
-            		intent = new Intent(ProductsActivity.this, MainActivity.class);
+            		intent = new Intent(SummaryActivity.this, MainActivity.class);
             	}
 				startActivity(intent);
             }
@@ -113,7 +106,7 @@ public class ProductsActivity extends ActionBarActivity {
     }
 	
 	private void setupDrawer() {
-			mDrawerToggle = new ActionBarDrawerToggle(ProductsActivity.this, mDrawerLayout,  R.string.drawer_open, R.string.drawer_close ) {
+			mDrawerToggle = new ActionBarDrawerToggle(SummaryActivity.this, mDrawerLayout,  R.string.drawer_open, R.string.drawer_close ) {
 
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
@@ -148,7 +141,7 @@ public class ProductsActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.products, menu);
+        getMenuInflater().inflate(R.menu.summary, menu);
         return true;
     }
 
@@ -180,8 +173,9 @@ class CallApi extends AsyncTask<Void, Void, Boolean> {
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			// TODO: attempt authentication against a network service.
-			HttpClient httpclient = new DefaultHttpClient();
-			HttpGet httpget = new HttpGet(url+"/?format=json");
+			HttpClient httpclient = DefaultHttp.getInstance();
+			HttpGet httpget = new HttpGet("http://www.theama.info/curbweb/user/?format=json");
+			httpget.setHeader("Authorization","Token "+ mykey);
 			HttpEntity httpEntity = null;
             HttpResponse response = null;
 			try {
@@ -209,82 +203,51 @@ class CallApi extends AsyncTask<Void, Void, Boolean> {
 			}
             
             return null;
-
 		}
-		
 
 		@Override
 		protected void onPostExecute(final Boolean success) {
 			if(success.equals(true)){
+				//Intent intent = new Intent(AccountActivity.this, MainScreenActivity.class);
+			    //startActivity(intent);
+				String username = null;
+				String email = null;
+				String fname = null;
+				String lname = null;
+				json = "[" + json + "]";
+				JSONArray dataList;
 				try {
-					createProductsList();
+					dataList = new JSONArray(json);
+					username = dataList.getJSONObject(0).getString("username");
+					email = dataList.getJSONObject(0).getString("email");
+					fname = dataList.getJSONObject(0).getString("first_name");
+					lname = dataList.getJSONObject(0).getString("last_name");
+					editText1 = (EditText)findViewById(R.id.userinput);
+					editText1.setText(username);
+					editText2 = (EditText)findViewById(R.id.emailinput);
+					editText2.setText(email);
+					editText3 = (EditText)findViewById(R.id.nameinput);
+					editText3.setText(fname);
+					editText4 = (EditText)findViewById(R.id.surnameinput);
+					editText4.setText(lname);
+					textView1 = (TextView)findViewById(R.id.sumval);
+					textView1.setText(sum.toString()+"€");
+					spinner.setVisibility(View.GONE);	
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				} catch (Throwable e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
 				}
-				spinner.setVisibility(View.GONE);
+				    
             }
 			else{
-				Toast.makeText(getApplicationContext(), "products not ok!", Toast.LENGTH_SHORT).show();
+				spinner.setVisibility(View.GONE);
+				Toast.makeText(getApplicationContext(), "Error.Try again!", Toast.LENGTH_SHORT).show();
 			}
 		}
 
 	}
-	
-	private void createProductsList () throws Throwable{
-		ProductAdapter adapter = new ProductAdapter(this, generateData());
-		 
-	    ListView listView = (ListView) findViewById(R.id.productsList);
-	
-	    listView.setAdapter(adapter);
-	    listView.setOnItemClickListener(new OnItemClickListener() {
-	        public void onItemClick(AdapterView<?> parent, View view, int position,long id) {
-	        	Product entry = (Product) parent.getItemAtPosition(position);
-	            Intent intent = new Intent(ProductsActivity.this, ProductPageActivity.class);
-	            //intent.putExtra("url", entry.getUrl());
-	            intent.putExtra("sku", entry.getSku());
-	            intent.putExtra("name", entry.getName());
-	            intent.putExtra("url", entry.getUrl());
-	            intent.putExtra("price", entry.getPrice());
-	            intent.putExtra("description", entry.getDescription());
-	            intent.putExtra("photo", entry.getPhoto());
-	            intent.putExtra("categ", entry.getCateg());
-	            intent.putExtra("sid", entry.getSid());
-	            Bundle extras = new Bundle();
-	            intent.putExtras(extras);
-	            startActivity(intent);
-	        }
-	    });
-	}
-	
-	private ArrayList<Product> generateData() throws JSONException, Throwable{
-		
-		JSONArray productsList =  new JSONArray(json);
-		
-		ArrayList<Product> products = new ArrayList<Product>();
-		
-		for (int i = 0; i < productsList.length(); i++) {
-		    //JSONObject shopList = shopsList.getJSONObject(i);
-		    String id = String.valueOf(i);// productsList.getJSONObject(i).getString("id");
-		    String sku = productsList.getJSONObject(i).getString("sku");
-	        String name = productsList.getJSONObject(i).getString("name");
-	        String url = productsList.getJSONObject(i).getString("url");
-	        String price = productsList.getJSONObject(i).getString("price");
-	        String description = productsList.getJSONObject(i).getString("description");
-		    String photo = productsList.getJSONObject(i).getString("photo");
-	        String categ = productsList.getJSONObject(i).getString("categ");
-	        String sid = productsList.getJSONObject(i).getString("sid");
-	        
-	       Product prod = new Product(id,sku,name,url,price,description,photo,categ,sid,"0"); 
-	        products.add(prod);
-		}
-	    return products;
-	}
-	
-	public void updateconfig(String s){
+    
+    public void updateconfig(String s){
 		String languageToLoad = s;
 		Locale locale = new Locale(languageToLoad);
 		Locale.setDefault(locale);
@@ -294,7 +257,7 @@ class CallApi extends AsyncTask<Void, Void, Boolean> {
 		langSelected = 0;
 		Bundle tempBundle = new Bundle();
 		onCreate(tempBundle);
-		getSupportActionBar().setTitle(R.string.title_activity_products);
+		getSupportActionBar().setTitle(R.string.title_activity_summary);
 		invalidateOptionsMenu();
     }
 }

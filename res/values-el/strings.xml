@@ -53,5 +53,10 @@
     <string name="mult">x</string>
     <string name="euro">€</string>
     <string name="sums">Ολοκληρωση Πληρωμης - Συνολο:</string>
+    <string name="sum">Συνολικό Ποσό :</string>
+    <string name="tilte_activity_summary">Περίληψη</string>
+    <string name="detailsTitle"><u>Στοιχεία Αποστολής</u></string>
+    <string name="complete">Ολοκλήρωση Παραγγελίας</string>
+    <string name="alertcart">Υπαρχεί εκκρεμής αγορά από άλλο κατάστημα.Θέλετε να την ακυρώσετε?</string>
 
 </resources>

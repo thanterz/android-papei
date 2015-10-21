@@ -16,7 +16,7 @@
     <string name="surnamelabel">Surname</string>
     <string name="surnameinput">Surname</string>
     <string name="tel">Telephone</string>
-    <string name="telinput">Telephone</string> 
+    <string name="telinput">Telephone</string>
     <string name="card">Card</string>
     <string name="cardinput">Card</string>
     <string name="user">User</string>
@@ -62,5 +62,10 @@
     <string name="creditcard">Credit Card</string>
     <string name="emailpass">Email</string>
     <string name="emailpassbtn">Send Email</string>
+    <string name="title_activity_summary">Summary</string>
+    <string name="sum">Total Cost :</string>
+    <string name="detailsTitle"><u>Delivery Details</u></string>
+    <string name="complete">Complete Order</string>
+    <string name="alertcart">There is a pending cart from another shop.Do you want to delete it?</string>
 
 </resources>

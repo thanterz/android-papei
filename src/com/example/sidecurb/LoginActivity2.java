@@ -159,6 +159,7 @@ public class LoginActivity2 extends ActionBarActivity {
 					editor.putString("cart", "[]");
 					editor.putString("csrftoken", cook.getValue());
 					editor.putString("sessionid", cook2.getValue());
+					editor.putString("shop", "");
 					editor.commit();
 					//Toast.makeText(getApplicationContext(), key, Toast.LENGTH_SHORT).show();
 					

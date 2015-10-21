@@ -10,6 +10,9 @@ import org.json.JSONObject;
 import com.example.sidecurb.LoginActivity2.CallApi;
 
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -48,12 +51,14 @@ public class ProductPageActivity extends ActionBarActivity{
 	private String price;
 	private String photo;
 	private String categ;
+	private String sid;
 	private Button buy;
-	private ProgressBar spinner;
 	private Intent intent;
 	private String cart;
-	private String qnt;
+	private String shop;
+	private String quantity;
 	private int langSelected = -1;
+	final Context context = this;
 	private SharedPreferences pref;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +83,7 @@ public class ProductPageActivity extends ActionBarActivity{
         description = intent.getStringExtra("description");
         photo = intent.getStringExtra("photo");
         categ = intent.getStringExtra("categ");
+        sid = intent.getStringExtra("sid");
         
         TextView prodDescription = (TextView)findViewById(R.id.description);
         prodDescription.setText(description);
@@ -91,57 +97,34 @@ public class ProductPageActivity extends ActionBarActivity{
 			  public void onClick(View v)
 			  {
 				  	EditText qnt = (EditText)findViewById(R.id.qnt);
-			        String quantity = (String) qnt.getText().toString();
+			        quantity = (String) qnt.getText().toString();
 			        if(quantity.isEmpty() || quantity.equals(null)){
 			        	quantity = "1";
 			        }
 				  	pref = getApplicationContext().getSharedPreferences("MyPref", 0);
+				  	shop = pref.getString("shop",null);
 				  	cart = pref.getString("cart", null);
-				  	int flag = -1;
-				  	try {
-				  		JSONArray cartList =  new JSONArray(cart);
-				  		JSONObject prodObj= new JSONObject();
-				  		if(cartList.length() > 0){
-				  			for (int i = 0; i < cartList.length(); i++) {
-				  				String tempUrl = cartList.getJSONObject(i).getString("url");
-				  				if(tempUrl.equals(url)){
-				  					String tempQnt = cartList.getJSONObject(i).getString("qnt");
-				  					int newQnt  = Integer.parseInt(tempQnt) + Integer.parseInt(quantity);
-				  					cartList.getJSONObject(i).put("qnt", ""+newQnt+"");
-				  					flag = i;
-				  				}
-				  			}
-				  			if(flag < 0){
-				  				prodObj.put("sku", sku);
-							  	prodObj.put("name", name);
-							  	prodObj.put("url", url);
-							  	prodObj.put("photo", photo);
-								prodObj.put("price", price);
-								prodObj.put("qnt", quantity);
-								cartList.put(prodObj);
-				  			}
-				  		}
-				  		else{
-					  		prodObj.put("sku", sku);
-						  	prodObj.put("name", name);
-						  	prodObj.put("url", url);
-						  	prodObj.put("photo", photo);
-							prodObj.put("price", price);
-							prodObj.put("qnt", quantity);
-							cartList.put(prodObj);
-				  		}
-						cart = cartList.toString();
-						Editor editor = pref.edit();
-						editor.remove("cart");
-						editor.putString("cart", cart);
-						editor.commit();
-					} catch (JSONException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				  	
-				  	
-				  	
+				  	if(shop!="" && !shop.equals(sid)){
+				  		AlertDialog alertCart = new AlertDialog.Builder(context)
+							.setTitle("Delete entry")
+							.setMessage(R.string.alertcart)
+							.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+					  	        public void onClick(DialogInterface dialog, int which) { 
+					  	            cart = "[]";
+					  	            addToCart(quantity, cart);
+					  	        }
+							})
+							.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+					  	        public void onClick(DialogInterface dialog, int which) { 
+					  	        	ProductPageActivity.this.finish();
+					  	        }
+					  	     })
+					  	     .setIcon(android.R.drawable.ic_dialog_alert)
+					  	     .show();
+				  	}
+				  	else{
+				  		addToCart(quantity, cart);
+				  	}
 			  }
 	    });
 	}
@@ -178,6 +161,52 @@ public class ProductPageActivity extends ActionBarActivity{
             }
         });
     }
+	
+	private void addToCart(String quantity, String cart){
+		int flag = -1;
+	  	try {
+	  		JSONArray cartList =  new JSONArray(cart);
+	  		JSONObject prodObj= new JSONObject();
+	  		if(cartList.length() > 0){
+	  			for (int i = 0; i < cartList.length(); i++) {
+	  				String tempUrl = cartList.getJSONObject(i).getString("url");
+	  				if(tempUrl.equals(url)){
+	  					String tempQnt = cartList.getJSONObject(i).getString("qnt");
+	  					int newQnt  = Integer.parseInt(tempQnt) + Integer.parseInt(quantity);
+	  					cartList.getJSONObject(i).put("qnt", ""+newQnt+"");
+	  					flag = i;
+	  				}
+	  			}
+	  			if(flag < 0){
+	  				prodObj.put("sku", sku);
+				  	prodObj.put("name", name);
+				  	prodObj.put("url", url);
+				  	prodObj.put("photo", photo);
+					prodObj.put("price", price);
+					prodObj.put("qnt", quantity);
+					cartList.put(prodObj);
+	  			}
+	  		}
+	  		else{
+		  		prodObj.put("sku", sku);
+			  	prodObj.put("name", name);
+			  	prodObj.put("url", url);
+			  	prodObj.put("photo", photo);
+				prodObj.put("price", price);
+				prodObj.put("qnt", quantity);
+				cartList.put(prodObj);
+	  		}
+			cart = cartList.toString();
+			Editor editor = pref.edit();
+			editor.remove("cart");
+			editor.putString("cart", cart);
+			editor.putString("shop", sid);
+			editor.commit();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 	private void setupDrawer() {
 			mDrawerToggle = new ActionBarDrawerToggle(ProductPageActivity.this, mDrawerLayout,  R.string.drawer_open, R.string.drawer_close ) {

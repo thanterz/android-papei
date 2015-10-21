@@ -218,7 +218,16 @@ public class CartActivity extends ActionBarActivity {
 	    //listView.onViewRemoved(child)
 	    btn = (Button)findViewById(R.id.btn);
 	    btn.setText("Total: "+sum+"");
-	    
+	    btn.setOnClickListener(new View.OnClickListener() {
+	        @Override
+	        public void onClick(View v) {
+	        	Intent intent = new Intent(CartActivity.this, SummaryActivity.class);
+	        	intent.putExtra("sum", sum);
+                Bundle extras = new Bundle();
+                intent.putExtras(extras);
+	        	startActivity(intent);
+	        }
+	    });
 	    //btn.setText(R.string.sums+sum+R.string.euro);
 	}
 	
