@@ -1,30 +1,60 @@
 package com.example.sidecurb;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.ParseException;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.CookieStore;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.protocol.ClientContext;
+import org.apache.http.cookie.Cookie;
+import org.apache.http.impl.client.BasicCookieStore;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.cookie.BasicClientCookie;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.protocol.HttpContext;
+import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.RelativeLayout;
 
@@ -35,11 +65,13 @@ public class CartActivity extends ActionBarActivity {
     private DrawerAdapter mAdapter;
 	private ActionBarDrawerToggle mDrawerToggle;
     private int mActivityTitle;
-    private HttpEntity json;
+    private String json;
 	private int langSelected = -1;
-	private SharedPreferences pref;
+	private static SharedPreferences pref;
 	private Button btn;
-	private float sum = 0;
+	private static float sum = 0;
+	private String csrftoken;
+	private static EditText qnt;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		if(langSelected==-1)	
@@ -49,7 +81,6 @@ public class CartActivity extends ActionBarActivity {
 	 	mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         mActivityTitle = R.string.title_activity_cart;
         getSupportActionBar().setTitle(mActivityTitle);
-        //new CallApi().execute();
         addDrawerItems();
         setupDrawer();
         try {
@@ -57,9 +88,15 @@ public class CartActivity extends ActionBarActivity {
 		} catch (Throwable e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} 
+		}
+        qnt = (EditText)findViewById(R.id.qnt);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+	}
+	
+
+	@Override
+	public void onBackPressed() {
 	}
 	
 	private void addDrawerItems() {
@@ -178,7 +215,7 @@ public class CartActivity extends ActionBarActivity {
 	    ListView listView = (ListView) findViewById(R.id.cartList);
 	
 	    listView.setAdapter(adapter);
-	    
+	    //listView.onViewRemoved(child)
 	    btn = (Button)findViewById(R.id.btn);
 	    btn.setText("Total: "+sum+"");
 	    
@@ -193,7 +230,7 @@ public class CartActivity extends ActionBarActivity {
 	  	JSONArray productsList =  new JSONArray(cart);
 		
 		ArrayList<Product> products = new ArrayList<Product>();
-		
+		sum = 0;
 		for (int i = 0; i < productsList.length(); i++) {
 		    //JSONObject shopList = shopsList.getJSONObject(i);
 		    String id = String.valueOf(i);// productsList.getJSONObject(i).getString("id");
@@ -210,8 +247,39 @@ public class CartActivity extends ActionBarActivity {
 	    return products;
 	}
 	
-	private void calculate (ListView list){
+	 @TargetApi(Build.VERSION_CODES.KITKAT) static OnClickListener remove (View v, ArrayList<Product> productsArrayList, Product s, int position){
+		 productsArrayList.remove(s);
+		 String cart = pref.getString("cart", null);
+		 try {
+			JSONArray productsList =  new JSONArray(cart);
+			productsList.remove(position);
+			Editor editor = pref.edit();
+			editor.putString("cart", productsList.toString());
+			editor.commit();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 		
 	}
+
+	public static void recalculate(View v, ArrayList<Product> productsArrayList, Product s, int position, String quantity) {
+		String cart = pref.getString("cart", null);
+		 try {
+			JSONArray productsList =  new JSONArray(cart);
+	        productsList.getJSONObject(position).put("qnt",quantity);
+			
+			Editor editor = pref.edit();
+			editor.putString("cart", productsList.toString());
+			editor.commit();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	 
+	 
+	
 }
 

@@ -84,7 +84,7 @@ public class LoginActivity2 extends ActionBarActivity {
 		protected Boolean doInBackground(Void... params) {
 			// TODO: attempt authentication against a network service.
 		    HttpClient httpClient=DefaultHttp.getInstance();
-			HttpPost httppost = new HttpPost("http://www.theama.info/curbweb/rest-auth/login/");
+			HttpPost httppost = new HttpPost("http://www.theama.info/curbweb/rest-auth/login/?format=json");
 			List<NameValuePair> nameValuePair = new ArrayList<NameValuePair>(2);
 			nameValuePair.add(new BasicNameValuePair("username", emailString.getText().toString()));
 			nameValuePair.add(new BasicNameValuePair("password", passwordString.getText().toString()));
@@ -113,9 +113,10 @@ public class LoginActivity2 extends ActionBarActivity {
 			}
 			
             try {
-            	cook = cookies.get(0);
-            	cook2 = cookies.get(1);
-            	
+            	if(cookies.size() >= 2){
+            		cook = cookies.get(0);
+            		cook2 = cookies.get(1);
+            	}
 				json = EntityUtils.toString(response.getEntity());
 				JSONObject object = new JSONObject(json);
 				Log.d("object string", object.toString());
