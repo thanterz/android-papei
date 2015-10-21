@@ -30,11 +30,16 @@ import org.json.JSONException;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -72,6 +77,10 @@ public class CartActivity extends ActionBarActivity {
 	private static float sum = 0;
 	private String csrftoken;
 	private static EditText qnt;
+	private SensorManager mSensorManager;
+	private float mAccel; 
+	private float mAccelCurrent; 
+	private float mAccelLast; 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		if(langSelected==-1)	
@@ -90,6 +99,11 @@ public class CartActivity extends ActionBarActivity {
 			e.printStackTrace();
 		}
         qnt = (EditText)findViewById(R.id.qnt);
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        mSensorManager.registerListener(mSensorListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
+        mAccel = 0.00f;
+        mAccelCurrent = SensorManager.GRAVITY_EARTH;
+        mAccelLast = SensorManager.GRAVITY_EARTH;
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 	}
@@ -287,6 +301,43 @@ public class CartActivity extends ActionBarActivity {
 			e.printStackTrace();
 		}
 	}
+	
+    private final SensorEventListener mSensorListener = new SensorEventListener() {
+
+        public void onSensorChanged(SensorEvent se) {
+          float x = se.values[0];
+          float y = se.values[1];
+          float z = se.values[2];
+          mAccelLast = mAccelCurrent;
+          mAccelCurrent = (float) Math.sqrt((double) (x*x + y*y + z*z));
+          float delta = mAccelCurrent - mAccelLast;
+          mAccel = mAccel * 0.9f + delta; // perform low-cut filter
+          if (mAccel > 12) {
+     			Editor editor = pref.edit();
+     			editor.putString("cart", "[]");
+     			editor.putString("shop", "");
+     			editor.commit();
+        	    Intent shakeintent = new Intent(CartActivity.this, CartActivity.class);
+        	    startActivity(shakeintent);
+          }
+        }
+
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        }
+      };
+
+      @Override
+      protected void onResume() {
+        super.onResume();
+        mSensorManager.registerListener(mSensorListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
+      }
+
+      @Override
+      protected void onPause() {
+        mSensorManager.unregisterListener(mSensorListener);
+        super.onPause();
+      }
+    
 	 
 	 
 	

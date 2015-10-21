@@ -358,8 +358,6 @@ public class MainScreenActivity extends ActionBarActivity {
           float delta = mAccelCurrent - mAccelLast;
           mAccel = mAccel * 0.9f + delta; // perform low-cut filter
           if (mAccel > 12) {
-        	    Toast toast = Toast.makeText(getApplicationContext(), "Device has shaken.", Toast.LENGTH_LONG);
-        	    toast.show();
         	    Intent shakeintent = new Intent(MainScreenActivity.this, MainScreenActivity.class);
         	    startActivity(shakeintent);
         	}
