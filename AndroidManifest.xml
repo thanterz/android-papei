@@ -82,6 +82,10 @@
             android:name=".SummaryActivity"
             android:label="@string/title_activity_summary" >
         </activity>
+        <activity
+            android:name=".OrdersActivity"
+            android:label="@string/title_activity_orders" >
+        </activity>
     </application>
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
