@@ -127,7 +127,7 @@ import android.widget.AdapterView.OnItemClickListener;
 	}
 	
 	private void addDrawerItems() {
-        String[] menuArray = { "Stores", "Categories", "My Cart", "My Account", "FAQ", "Log Out" };
+        String[] menuArray = { "Stores", "Orders", "My Cart", "My Account", "FAQ", "Log Out" };
         mAdapter = new DrawerAdapter(this, menuArray);
         mDrawerList.setAdapter(mAdapter);
 
@@ -140,7 +140,7 @@ import android.widget.AdapterView.OnItemClickListener;
             		intent = new Intent(CategoriesActivity.this, MainScreenActivity.class);
             	}
             	else if(position == 1){
-            		intent = new Intent(CategoriesActivity.this, CategoriesActivity.class);
+            		intent = new Intent(CategoriesActivity.this, OrdersActivity.class);
             	}
             	else if(position == 2){
             		intent = new Intent(CategoriesActivity.this, CartActivity.class);
