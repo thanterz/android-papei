@@ -40,6 +40,7 @@
     <string name="title_activity_faq">FAQ</string>
     <string name="title_activity_products">Products</string>
     <string name="title_activity_product_page">Details</string>
+    <string name="title_activity_orders">Orders</string>
     <string name="registerbtn">Register</string>
     <string name="languageupdate">Change Language</string>
     <string name="english">English</string>
@@ -68,5 +69,6 @@
     <string name="complete">Complete Order</string>
     <string name="alertcart">There is a pending cart from another shop.Do you want to delete it?</string>
     <string name="speak">Voice Recognition</string>
-
+    <string name="activeorders">Active Orders</string>
+    <string name="orderhistory">Order History</string>
 </resources>
