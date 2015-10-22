@@ -107,7 +107,7 @@ public class OrdersActivity extends ActionBarActivity {
 				
 	 	mDrawerList = (ListView)findViewById(R.id.navList);
 	 	mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
-        mActivityTitle = R.string.title_activity_main_screen;
+        mActivityTitle = R.string.title_activity_orders;
       
         getSupportActionBar().setTitle(mActivityTitle);
         addDrawerItems();
@@ -186,7 +186,7 @@ public class OrdersActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main_screen, menu);
+        getMenuInflater().inflate(R.menu.orders, menu);
         return true;
     }
 
@@ -224,7 +224,7 @@ public class OrdersActivity extends ActionBarActivity {
 		langSelected = 0;
 		Bundle tempBundle = new Bundle();
 		onCreate(tempBundle);
-		getSupportActionBar().setTitle(R.string.title_activity_main_screen);
+		getSupportActionBar().setTitle(R.string.title_activity_orders);
 		invalidateOptionsMenu();
     }
     

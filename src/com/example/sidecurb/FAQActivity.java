@@ -59,7 +59,7 @@ public class FAQActivity extends ActionBarActivity {
 	}
 	
 	private void addDrawerItems() {
-        String[] menuArray = { "Stores", "Categories", "My Cart", "My Account", "FAQ", "Log Out" };
+        String[] menuArray = { "Stores", "Orders", "My Cart", "My Account", "FAQ", "Log Out" };
         mAdapter = new DrawerAdapter(this, menuArray);
         mDrawerList.setAdapter(mAdapter);
 
@@ -72,7 +72,7 @@ public class FAQActivity extends ActionBarActivity {
             		intent = new Intent(FAQActivity.this, MainScreenActivity.class);
             	}
             	else if(position == 1){
-            		intent = new Intent(FAQActivity.this, CategoriesActivity.class);
+            		intent = new Intent(FAQActivity.this, OrdersActivity.class);
             	}
             	else if(position == 2){
             		intent = new Intent(FAQActivity.this, CartActivity.class);

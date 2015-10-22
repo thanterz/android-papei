@@ -35,7 +35,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.sun.jna.platform.win32.OaIdl.DATE;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -127,7 +126,7 @@ public class SummaryActivity extends ActionBarActivity {
 	}
 	
 	private void addDrawerItems() {
-        String[] menuArray = { "Stores", "Categories", "My Cart", "My Account", "FAQ" ,"Log Out"};
+        String[] menuArray = { "Stores", "Orders", "My Cart", "My Account", "FAQ" ,"Log Out"};
         mAdapter = new DrawerAdapter(SummaryActivity.this, menuArray);
         mDrawerList.setAdapter(mAdapter);
         
@@ -140,7 +139,7 @@ public class SummaryActivity extends ActionBarActivity {
             		intent = new Intent(SummaryActivity.this, MainScreenActivity.class);
             	}
             	else if(position == 1){
-            		intent = new Intent(SummaryActivity.this, CategoriesActivity.class);
+            		intent = new Intent(SummaryActivity.this, OrdersActivity.class);
             	}
             	else if(position == 2){
             		intent = new Intent(SummaryActivity.this, CartActivity.class);

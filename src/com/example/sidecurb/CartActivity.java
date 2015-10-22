@@ -114,7 +114,7 @@ public class CartActivity extends ActionBarActivity {
 	}
 	
 	private void addDrawerItems() {
-        String[] menuArray = { "Stores", "Categories", "My Cart", "My Account", "FAQ", "Log Out" };
+        String[] menuArray = { "Stores", "Orders", "My Cart", "My Account", "FAQ", "Log Out" };
         mAdapter = new DrawerAdapter(this, menuArray);
         mDrawerList.setAdapter(mAdapter);
 

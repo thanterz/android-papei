@@ -59,5 +59,9 @@
     <string name="complete">Ολοκλήρωση Παραγγελίας</string>
     <string name="alertcart">Υπαρχεί εκκρεμής αγορά από άλλο κατάστημα.Θέλετε να την ακυρώσετε?</string>
     <string name="speak">Φωνητική Ανγνώριση</string>
+    <string name="activeorders">Τρέχουσες παραγγελίες</string>
+    <string name="orderhistory">Ιστορικό Παραγγελιών</string>
+    <string name="title_activity_orders">Παραγγελίες</string>
+    
 
 </resources>
