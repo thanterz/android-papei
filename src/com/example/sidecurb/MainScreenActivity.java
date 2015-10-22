@@ -415,6 +415,10 @@ public class MainScreenActivity extends ActionBarActivity {
     				Intent intent = new Intent(MainScreenActivity.this, MainActivity.class);
     				startActivity(intent);
             	}
+    			else if(command.equalsIgnoreCase("orders") ){
+    				Intent intent = new Intent(MainScreenActivity.this, OrdersActivity.class);
+    				startActivity(intent);
+            	}
     		}
     	}
     	else{

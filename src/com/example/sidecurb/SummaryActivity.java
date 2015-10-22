@@ -289,7 +289,7 @@ class CallApi extends AsyncTask<Void, Void, Boolean> {
 					editText4 = (EditText)findViewById(R.id.surnameinput);
 					editText4.setText(lname);
 					textView1 = (TextView)findViewById(R.id.sumval);
-					textView1.setText(sum.toString()+"ï¿½");
+					textView1.setText(sum.toString()+"€");
 					spinner.setVisibility(View.GONE);	
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
@@ -453,6 +453,10 @@ class CompleteOrderApi extends AsyncTask<Void, Void, Boolean> {
     			}
     			else if(command.equalsIgnoreCase("exit") || command.equalsIgnoreCase("log out")){
     				Intent intent = new Intent(SummaryActivity.this, MainActivity.class);
+    				startActivity(intent);
+            	}
+    			else if(command.equalsIgnoreCase("orders") ){
+    				Intent intent = new Intent(SummaryActivity.this, OrdersActivity.class);
     				startActivity(intent);
             	}
     			else if(command.equals("complete order")){
