@@ -40,7 +40,7 @@ public class DrawerAdapter extends ArrayAdapter<String> {
             }
             else if (position == 1){
             	drawerAction.setText(R.string.title_activity_categories);
-            	iconDrawer.setImageResource(R.drawable.redicon);
+            	iconDrawer.setImageResource(R.drawable.ordericon);
             }
             else if (position == 2){
             	drawerAction.setText(R.string.title_activity_cart);
