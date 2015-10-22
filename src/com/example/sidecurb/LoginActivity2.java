@@ -119,7 +119,6 @@ public class LoginActivity2 extends ActionBarActivity {
             	}
 				json = EntityUtils.toString(response.getEntity());
 				JSONObject object = new JSONObject(json);
-				Log.d("object string", object.toString());
 				if(object.has("key")){
 					return true;
 				}
