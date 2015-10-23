@@ -1,6 +1,10 @@
 package com.example.sidecurb;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.TimeZone;
 
 
 import android.content.Context;
@@ -39,7 +43,16 @@ public class OrdersAdapter extends ArrayAdapter<Order> {
         TextView dateTextView = (TextView)rowView.findViewById(R.id.dateordered);
         // 4. Set the text for textView 
         ordernoView.setText(ordersArrayList.get(position).getPurchase_no());
-        dateTextView.setText(ordersArrayList.get(position).getDateString());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        sdf.setTimeZone(TimeZone.getTimeZone("Europe/Athens"));
+        String time = new Date().toString();
+		try {
+			time = sdf.parse(ordersArrayList.get(position).getDateString().toString()).toString();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+        dateTextView.setText(time);
         pickView.setText("No pick up yet");
         
         return rowView;

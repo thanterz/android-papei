@@ -19,6 +19,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -67,6 +68,7 @@ public class MainScreenActivity extends ActionBarActivity {
 	private float mAccelCurrent; // current acceleration including gravity
 	private float mAccelLast; // last acceleration including gravity
 	private static final int REQUEST_CODE = 1234;
+	private SharedPreferences pref;
 	Button Start;
 	TextView Speech;
 	Dialog match_text_dialog;
@@ -270,7 +272,12 @@ public class MainScreenActivity extends ActionBarActivity {
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position,long id) {
+            	
             	Shop entry = (Shop) parent.getItemAtPosition(position);
+            	pref = getApplicationContext().getSharedPreferences("MyPref", 0);
+				Editor editor = pref.edit();
+				editor.putString("curshop", entry.getId());
+				editor.commit();
                 Intent intent = new Intent(MainScreenActivity.this, CategoriesActivity.class);
                 intent.putExtra("shop", entry.getShop());
                 intent.putExtra("address", entry.getAddress());

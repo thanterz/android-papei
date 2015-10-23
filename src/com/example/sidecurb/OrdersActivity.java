@@ -311,16 +311,6 @@ import android.widget.Toast;
             ListView listView = (ListView) findViewById(R.id.ordersList);
      
             listView.setAdapter(adapter);
-    	    
-    	    setListViewHeightBasedOnChildren(adapter, listView);
-           // listView.setOnItemClickListener(new OnItemClickListener() {
-             //   public void onItemClick(AdapterView<?> parent, View view, int position,long id) {
-               // 	Order entry = (Order) parent.getItemAtPosition(position);
-                    //Intent intent = new Intent(OrdersActivity.this, CategoriesActivity.class);
-                    //intent.putExtras(extras);
-                    //startActivity(intent);
-               // }
-            //});
         }
      
         private ArrayList<Order> generateData() throws JSONException, Throwable{
