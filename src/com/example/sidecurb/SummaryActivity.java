@@ -35,6 +35,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.sun.jna.platform.win32.WinNT.SID_AND_ATTRIBUTES;
+
 
 import android.app.Dialog;
 import android.content.Context;
@@ -87,6 +89,10 @@ public class SummaryActivity extends ActionBarActivity {
 	private String cart;
 	private SharedPreferences pref;
 	private static final int REQUEST_CODE = 1234;
+	private String shopid;
+	private String shop;
+	private String sid;
+	private int integershopid;
 	Button Start;
 	TextView Speech;
 	Dialog match_text_dialog;
@@ -111,6 +117,11 @@ public class SummaryActivity extends ActionBarActivity {
         SharedPreferences shared = getSharedPreferences("MyPref", 0);
         mykey = (shared.getString("key", ""));
         cartsString = (shared.getString("cart", ""));
+        shop = (shared.getString("shop", ""));
+        String[] bits = shop.split("/");
+        String shopid = bits[bits.length-1];
+        integershopid = Integer.parseInt(shopid);
+        
         new CallApi().execute();
         Button completeorderButton = (Button)findViewById(R.id.completeorderbtn);
         completeorderButton.setOnClickListener(new OnClickListener() {
@@ -289,7 +300,7 @@ class CallApi extends AsyncTask<Void, Void, Boolean> {
 					editText4 = (EditText)findViewById(R.id.surnameinput);
 					editText4.setText(lname);
 					textView1 = (TextView)findViewById(R.id.sumval);
-					textView1.setText(sum.toString()+"€");
+					textView1.setText(sum.toString()+"ï¿½");
 					spinner.setVisibility(View.GONE);	
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
@@ -318,6 +329,7 @@ class CompleteOrderApi extends AsyncTask<Void, Void, Boolean> {
 		Log.d("unique",uniqueID);
 		nameValuePair.add(new BasicNameValuePair("purchase_no", uniqueID ));
 		nameValuePair.add(new BasicNameValuePair("pick", "false"));
+		nameValuePair.add(new BasicNameValuePair("store",Integer.toString(integershopid)));
 		SimpleDateFormat dateFormat= new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ",Locale.ENGLISH);
 	    String cDateTime=dateFormat.format(new Date());
 
@@ -374,7 +386,10 @@ class CompleteOrderApi extends AsyncTask<Void, Void, Boolean> {
 				editor.remove("cart");
 				cart = pref.getString("cart", null);
 				cart = "[]";
+				sid = pref.getString("shop", null);
+				sid = "";
 				editor.putString("cart", cart);
+				editor.putString("shop", sid);
 				editor.commit();
 				Intent intent = new Intent(SummaryActivity.this, MainScreenActivity.class);
 			    startActivity(intent);
