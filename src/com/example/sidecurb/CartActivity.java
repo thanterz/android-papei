@@ -127,7 +127,7 @@ public class CartActivity extends ActionBarActivity {
             		intent = new Intent(CartActivity.this, MainScreenActivity.class);
             	}
             	else if(position == 1){
-            		intent = new Intent(CartActivity.this, CategoriesActivity.class);
+            		intent = new Intent(CartActivity.this, AccountActivity.class);
             	}
             	else if(position == 2){
             		intent = new Intent(CartActivity.this, CartActivity.class);

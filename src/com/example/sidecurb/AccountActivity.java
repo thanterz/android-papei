@@ -179,7 +179,7 @@ public class AccountActivity extends ActionBarActivity {
             		intent = new Intent(AccountActivity.this, MainScreenActivity.class);
             	}
             	else if(position == 1){
-            		intent = new Intent(AccountActivity.this, CategoriesActivity.class);
+            		intent = new Intent(AccountActivity.this, OrdersActivity.class);
             	}
             	else if(position == 2){
             		intent = new Intent(AccountActivity.this, CartActivity.class);
