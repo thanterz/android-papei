@@ -312,7 +312,7 @@ import android.widget.Toast;
      
             listView.setAdapter(adapter);
     	    
-    	    setListViewHeightBasedOnChildren(adapter, listView);
+    	    //setListViewHeightBasedOnChildren(adapter, listView);
            // listView.setOnItemClickListener(new OnItemClickListener() {
              //   public void onItemClick(AdapterView<?> parent, View view, int position,long id) {
                // 	Order entry = (Order) parent.getItemAtPosition(position);
