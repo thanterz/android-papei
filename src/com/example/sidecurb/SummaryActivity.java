@@ -35,8 +35,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.sun.jna.platform.win32.WinNT.SID_AND_ATTRIBUTES;
-
 
 import android.app.Dialog;
 import android.content.Context;
