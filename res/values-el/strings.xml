@@ -51,7 +51,15 @@
     <string name="updatebtn">Ανανέωση Στοιχείων</string>
     <string name="logout">Έξοδος</string>
     <string name="mult">x</string>
-    <string name="euro">€</string>
+    <string name="euro">€</string>    
+    <string name="retypepass">Επαναπληκτρολογήστε Κωδικό</string>
+    <string name="oldpass">Παλιός Κωδικός</string>
+    <string name="newpass">Νέος Κωδικός</string>
+    <string name="passReset">Reset Κωδικού</string>
+    <string name="accountDetails">Λεπτομέρειες Λογαριασμού</string>
+    <string name="creditcard">Πιστωτική Κάρτα</string>
+    <string name="emailpass">Email</string>
+    <string name="emailpassbtn">Αποστολή Email</string>
     <string name="sums">Ολοκληρωση Πληρωμης - Συνολο:</string>
     <string name="sum">Συνολικό Ποσό :</string>
     <string name="tilte_activity_summary">Περίληψη</string>
