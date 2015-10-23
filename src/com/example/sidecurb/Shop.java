@@ -26,7 +26,7 @@ public class Shop {
         this.lon = lon;
     }
 
-	public CharSequence getId() {
+	public String getId() {
 		// TODO Auto-generated method stub
 		return this.id;
 	}

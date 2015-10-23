@@ -57,6 +57,7 @@ public class ProductPageActivity extends ActionBarActivity{
 	private String cart;
 	private String shop;
 	private String quantity;
+	private String curshop;
 	private int langSelected = -1;
 	final Context context = this;
 	private SharedPreferences pref;
@@ -103,8 +104,10 @@ public class ProductPageActivity extends ActionBarActivity{
 			        }
 				  	pref = getApplicationContext().getSharedPreferences("MyPref", 0);
 				  	shop = pref.getString("shop",null);
+				  	curshop = pref.getString("curshop",null);
 				  	cart = pref.getString("cart", null);
-				  	if(shop!="" && !shop.equals(sid)){
+				  	sid = curshop;
+				  	if(shop!="" && !shop.equals(curshop)){
 				  		AlertDialog alertCart = new AlertDialog.Builder(context)
 							.setTitle("Delete entry")
 							.setMessage(R.string.alertcart)
