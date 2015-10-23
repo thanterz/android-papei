@@ -1,20 +1,29 @@
 package com.example.sidecurb;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.ParseException;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
+import android.R.string;
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -35,22 +44,26 @@ import android.speech.RecognizerIntent;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBar.LayoutParams;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.View.MeasureSpec;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class OrdersActivity extends ActionBarActivity {
+@SuppressLint("NewApi") public class OrdersActivity extends ActionBarActivity {
 
 	private ListView mDrawerList;
     private DrawerLayout mDrawerLayout;
@@ -60,6 +73,9 @@ public class OrdersActivity extends ActionBarActivity {
 	
 	private ProgressBar spinner;
 	private int langSelected = -1;
+	private String mykey;
+	private String cr;
+	private String json;
 	
 	
 	ArrayList<String> matches_text;
@@ -104,11 +120,14 @@ public class OrdersActivity extends ActionBarActivity {
 				
 			}
 		});
-				
+		SharedPreferences shared = getSharedPreferences("MyPref", 0);
+        cr = (shared.getString("csrftoken", ""));
+        mykey = (shared.getString("key", ""));
+		
 	 	mDrawerList = (ListView)findViewById(R.id.navList);
 	 	mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         mActivityTitle = R.string.title_activity_orders;
-      
+        new ActiveOrdersApi().execute();
         getSupportActionBar().setTitle(mActivityTitle);
         addDrawerItems();
         setupDrawer();
@@ -227,6 +246,129 @@ public class OrdersActivity extends ActionBarActivity {
 		getSupportActionBar().setTitle(R.string.title_activity_orders);
 		invalidateOptionsMenu();
     }
+    class ActiveOrdersApi extends AsyncTask<Void, Void, Boolean> {
+    	
+    	@Override
+    	protected Boolean doInBackground(Void... params) {
+    		// TODO: attempt authentication against a network service.
+    		HttpClient httpClient = new DefaultHttpClient();
+    		HttpGet httpget = new HttpGet("http://www.theama.info/curbweb/api/api/pickups/");
+    		httpget.setHeader("Authorization","Token "+ mykey);
+    		//httpput.setHeader("Content-Type", "application/json");
+    		//httpput.setHeader("X-CSRFToken",cr);
+    		//httpput.setHeader("Cookie","csrftoken="+cr);
+    		//httpput.setHeader("Cookie","sessionid="+sessionString);
+    		HttpEntity httpEntity = null;
+            HttpResponse response = null;
+			try {
+				response = httpClient.execute(httpget);
+			} catch (ClientProtocolException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+            try {    			
+            	httpEntity = response.getEntity();
+                try {
+					json = EntityUtils.toString(httpEntity,"UTF-8");
+					
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				return true;
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+            
+            return null;
+    	}
+
+    	@Override
+    	protected void onPostExecute(final Boolean success) {
+    		if(success.equals(true)){
+    			Log.d("json",json);
+				try {
+					createOrdersList();
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (Throwable e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+            }
+			else{
+				Toast.makeText(getApplicationContext(), "Login error.Try again!", Toast.LENGTH_SHORT).show();
+			}
+    	}}
+    	private void createOrdersList () throws Throwable{
+    		OrdersAdapter adapter = new OrdersAdapter(this, generateData());
+    		 
+            ListView listView = (ListView) findViewById(R.id.ordersList);
+     
+            listView.setAdapter(adapter);
+    	    
+    	    setListViewHeightBasedOnChildren(adapter, listView);
+           // listView.setOnItemClickListener(new OnItemClickListener() {
+             //   public void onItemClick(AdapterView<?> parent, View view, int position,long id) {
+               // 	Order entry = (Order) parent.getItemAtPosition(position);
+                    //Intent intent = new Intent(OrdersActivity.this, CategoriesActivity.class);
+                    //intent.putExtras(extras);
+                    //startActivity(intent);
+               // }
+            //});
+        }
+     
+        private ArrayList<Order> generateData() throws JSONException, Throwable{
+    		JSONArray ordersList =  new JSONArray(json);
+    		ArrayList<Order> orders = new ArrayList<Order>();
+    		for (int i = 0; i < ordersList.length(); i++) {
+    		    //JSONObject shopList = shopsList.getJSONObject(i);
+    		    String purchaseString = ordersList.getJSONObject(i).getString("purchase_no");
+    	        String dateString = ordersList.getJSONObject(i).getString("date");
+    	       
+    	        Order nOrder = new Order(purchaseString,dateString); 
+    	        
+    	        orders.add(nOrder);
+    	        
+    		}
+    		
+            return orders;
+        }
+        @SuppressLint("NewApi") public static void setListViewHeightBasedOnChildren(OrdersAdapter adapter, ListView listView) 
+  	  {
+  		  OrdersAdapter listAdapter = adapter;
+  	      if (listAdapter == null)
+  	          return;
+
+  	      int desiredWidth = MeasureSpec.makeMeasureSpec(listView.getWidth(), MeasureSpec.UNSPECIFIED);
+  	      int totalHeight=0;
+  	      View view = null;
+
+  	      for (int i = 0; i < listAdapter.getCount(); i++) 
+  	      {
+  	          view = listAdapter.getView(i, view, listView);
+
+  	          if (i == 0)
+  	              view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth,  LayoutParams.WRAP_CONTENT));
+
+  	          view.measure(desiredWidth, MeasureSpec.UNSPECIFIED);
+  	          totalHeight += view.getMinimumHeight();
+
+  	      }
+
+  	      ViewGroup.LayoutParams params = listView.getLayoutParams();
+  	      params.height = totalHeight + ((listView.getDividerHeight()) * (listAdapter.getCount()));
+
+  	      listView.setLayoutParams(params);
+  	      listView.requestLayout();
+
+  	  }
+
     
     
     }
