@@ -330,7 +330,6 @@ import android.widget.Toast;
     		    //JSONObject shopList = shopsList.getJSONObject(i);
     		    String purchaseString = ordersList.getJSONObject(i).getString("purchase_no");
     	        String dateString = ordersList.getJSONObject(i).getString("date");
-    	       
     	        Order nOrder = new Order(purchaseString,dateString); 
     	        
     	        orders.add(nOrder);

@@ -23,7 +23,7 @@ public class Order {
 	
 	public void setPurchase_no(String purchase_no) {
 		// TODO Auto-generated method stub
-		this.purchase_no		= purchase_no;
+		this.purchase_no = purchase_no;
 	}
 
 	public void setDateString(String dateString) {

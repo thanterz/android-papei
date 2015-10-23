@@ -69,6 +69,17 @@
 	    android:id="@+id/orderhistorylistlayout"
 	    android:layout_below="@+id/ordertabbuttonslayout"
     	android:visibility="gone" >
+    <TextView
+	    	    android:id="@+id/pick"
+	    	    android:layout_width="match_parent"
+	    	    android:layout_height="match_parent"
+	    	    android:paddingLeft="5dp"
+	    	    android:paddingTop="10dp"
+	    	    android:textColor="#7A8082"
+	    	    android:text="@string/surnameinput"
+	    	    android:textSize="15sp" >
+		    </TextView>
+        
     </LinearLayout>
     
        </RelativeLayout>
