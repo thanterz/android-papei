@@ -38,6 +38,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
@@ -311,6 +312,16 @@ import android.widget.Toast;
             ListView listView = (ListView) findViewById(R.id.ordersList);
      
             listView.setAdapter(adapter);
+            listView.setOnItemClickListener(new OnItemClickListener() {
+    	        public void onItemClick(AdapterView<?> parent, View view, int position,long id) {
+    	        	Order entry = (Order) parent.getItemAtPosition(position);
+    	        	String lat = (String) entry.getLatString();
+    	        	String lon = (String) entry.getLonString();
+    	        	Intent intent = new Intent(android.content.Intent.ACTION_VIEW, 
+    						Uri.parse("http://maps.google.com/maps?daddr="+lat+","+lon));
+    						startActivity(intent);
+    	        }
+    	    });
         }
      
         private ArrayList<Order> generateData() throws JSONException, Throwable{
@@ -320,7 +331,9 @@ import android.widget.Toast;
     		    //JSONObject shopList = shopsList.getJSONObject(i);
     		    String purchaseString = ordersList.getJSONObject(i).getString("purchase_no");
     	        String dateString = ordersList.getJSONObject(i).getString("date");
-    	        Order nOrder = new Order(purchaseString,dateString); 
+    	        String latString = ordersList.getJSONObject(i).getString("lat");
+    	        String lonString = ordersList.getJSONObject(i).getString("lon");
+    	        Order nOrder = new Order(purchaseString,dateString,latString,lonString); 
     	        
     	        orders.add(nOrder);
     	        
