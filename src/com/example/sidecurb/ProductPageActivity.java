@@ -36,6 +36,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 public class ProductPageActivity extends ActionBarActivity{
@@ -107,26 +108,31 @@ public class ProductPageActivity extends ActionBarActivity{
 				  	curshop = pref.getString("curshop",null);
 				  	cart = pref.getString("cart", null);
 				  	sid = curshop;
-				  	if(shop!="" && !shop.equals(curshop)){
-				  		AlertDialog alertCart = new AlertDialog.Builder(context)
-							.setTitle("Delete entry")
-							.setMessage(R.string.alertcart)
-							.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-					  	        public void onClick(DialogInterface dialog, int which) { 
-					  	            cart = "[]";
-					  	            addToCart(quantity, cart);
-					  	        }
-							})
-							.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-					  	        public void onClick(DialogInterface dialog, int which) { 
-					  	        	ProductPageActivity.this.finish();
-					  	        }
-					  	     })
-					  	     .setIcon(android.R.drawable.ic_dialog_alert)
-					  	     .show();
+				  	if(Integer.parseInt(quantity) > 0){
+					  	if(shop!="" && !shop.equals(curshop)){
+					  		AlertDialog alertCart = new AlertDialog.Builder(context)
+								.setTitle("Delete entry")
+								.setMessage(R.string.alertcart)
+								.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+						  	        public void onClick(DialogInterface dialog, int which) { 
+						  	            cart = "[]";
+						  	            addToCart(quantity, cart);
+						  	        }
+								})
+								.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+						  	        public void onClick(DialogInterface dialog, int which) { 
+						  	        	ProductPageActivity.this.finish();
+						  	        }
+						  	     })
+						  	     .setIcon(android.R.drawable.ic_dialog_alert)
+						  	     .show();
+					  	}
+					  	else{
+					  		addToCart(quantity, cart);
+					  	}
 				  	}
 				  	else{
-				  		addToCart(quantity, cart);
+				  		Toast.makeText(getApplicationContext(), "0 Quantity!", Toast.LENGTH_LONG).show();
 				  	}
 			  }
 	    });

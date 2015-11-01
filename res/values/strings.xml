@@ -71,4 +71,5 @@
     <string name="speak">Voice Recognition</string>
     <string name="activeorders">Active Orders</string>
     <string name="orderhistory">Order History</string>
+    <string name="zeroQnt">The quantity is 0.</string>
 </resources>

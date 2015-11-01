@@ -70,6 +70,7 @@
     <string name="activeorders">Τρέχουσες παραγγελίες</string>
     <string name="orderhistory">Ιστορικό Παραγγελιών</string>
     <string name="title_activity_orders">Παραγγελίες</string>
+    <string name="zeroQnt">Έχετε εισάγει μηδενική ποσότητα!</string>
     
 
 </resources>
