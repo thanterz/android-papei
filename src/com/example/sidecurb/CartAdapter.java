@@ -51,7 +51,7 @@ public class CartAdapter extends ArrayAdapter<Product> {
             name.setText(productsArrayList.get(position).getName().toString());
 
             TextView price = (TextView) rowView.findViewById(R.id.price);
-            price.setText(productsArrayList.get(position).getPrice()+"€");
+            price.setText(productsArrayList.get(position).getPrice()+"ï¿½");
             
             final EditText qnt = (EditText) rowView.findViewById(R.id.qnt);
             qnt.setText(productsArrayList.get(position).getQnt());
@@ -71,7 +71,7 @@ public class CartAdapter extends ArrayAdapter<Product> {
             
             TextView sum = (TextView) rowView.findViewById(R.id.sum);
             Float sums = Float.valueOf(productsArrayList.get(position).getPrice()) * Float.valueOf(productsArrayList.get(position).getQnt());
-            sum.setText(""+sums+" "+"€");
+            sum.setText(""+sums+" "+"â‚¬");
             
             ImageView imageView  = (ImageView) rowView.findViewById(R.id.image);
             new DownloadImageTask(imageView).execute(productsArrayList.get(position).getPhoto());
@@ -104,6 +104,11 @@ public class CartAdapter extends ArrayAdapter<Product> {
         	      try {
         	        InputStream in = new java.net.URL(urldisplay).openStream();
         	        mIcon11 = BitmapFactory.decodeStream(in);
+        	        /*if(mIcon11!=null)
+        	        {
+        	          mIcon11.recycle();
+        	          mIcon11=null;
+        	         }*/
         	      } catch (Exception e) {
         	          Log.e("Error", e.getMessage());
         	          e.printStackTrace();
