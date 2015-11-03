@@ -89,7 +89,7 @@ public class RegisterActivity extends ActionBarActivity {
 		             ImageView imageview2= (ImageView)findViewById(R.id.excimageuser);
 		             Drawable res = getResources().getDrawable(imageResource);
 		             imageview2.setImageDrawable(res); 
-		             Boolean validBoolean=true;
+		             validBoolean=true;
 		        }
 		        else
 		        {
@@ -133,7 +133,7 @@ public class RegisterActivity extends ActionBarActivity {
 		             ImageView imageview2= (ImageView)findViewById(R.id.excimage);
 		             Drawable res = getResources().getDrawable(imageResource);
 		             imageview2.setImageDrawable(res); 
-		             Boolean validBoolean=true;
+		             validBoolean=true;
 		        }
 		        else
 		        {
@@ -169,13 +169,14 @@ public class RegisterActivity extends ActionBarActivity {
 				//Intent intent = new Intent(MainActivity.this, LoginActivity2.class);
 				//Intent intent = new Intent(RegisterActivity.this, MainScreenActivity.class);
 				//startActivity(intent);
-				if(pass1Text.getText().toString().equals( pass2Text.getText().toString())){
+				if(pass1Text.getText().toString().equals( pass2Text.getText().toString()) && pass1Text.length() >= 6){
 					String uri2 = "@drawable/green_exc";
 		            int imageResource = getResources().getIdentifier(uri2, null, getPackageName());
 
 		             ImageView imageview2= (ImageView)findViewById(R.id.excimagepass2);
 		             Drawable res = getResources().getDrawable(imageResource);
-		             imageview2.setImageDrawable(res); 
+		             imageview2.setImageDrawable(res);
+		             identicalBoolean = true;
 				}
 				else{
 					String uri2 = "@drawable/red_exc";
@@ -210,9 +211,7 @@ class CallApi extends AsyncTask<Void, Void, Boolean> {
 			nameValuePair.add(new BasicNameValuePair("password1", pass1Text.getText().toString()));
 			nameValuePair.add(new BasicNameValuePair("password2", pass2Text.getText().toString()));
 			nameValuePair.add(new BasicNameValuePair("email", emailText.getText().toString()));
-			CookieStore cookieStore = new BasicCookieStore();
-			HttpContext context = new BasicHttpContext();
-			context.setAttribute(ClientContext.COOKIE_STORE, cookieStore);
+			//HttpContext context = new BasicHttpContext();
 			try {
 				httppost.setEntity(new UrlEncodedFormEntity(nameValuePair));
 			} catch (UnsupportedEncodingException e1) {
@@ -220,7 +219,6 @@ class CallApi extends AsyncTask<Void, Void, Boolean> {
 				e1.printStackTrace();
 			}
 			HttpResponse response = null;
-            List<Cookie> cookies  = null;
 			try {
 				response = httpclient.execute(httppost);
 			} catch (ClientProtocolException e1) {
@@ -231,7 +229,6 @@ class CallApi extends AsyncTask<Void, Void, Boolean> {
 				e1.printStackTrace();
 			}
             try {
-            	cook = cookies.get(0);
 				jsonstring = EntityUtils.toString(response.getEntity());
 				if(jsonstring.indexOf("key")>-1){
 					return true;
@@ -266,10 +263,9 @@ class CallApi extends AsyncTask<Void, Void, Boolean> {
 					Editor editor = pref.edit();
 					editor.putString("key", key);
 					editor.putString("cart", "[]");
-					editor.putString("csrftoken", cook.getValue());
 					editor.commit();
 					Toast.makeText(getApplicationContext(), key, Toast.LENGTH_SHORT).show();
-					Intent intent = new Intent(RegisterActivity.this, MainScreenActivity.class);
+					Intent intent = new Intent(RegisterActivity.this, LoginActivity2.class);
 				    startActivity(intent);
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block

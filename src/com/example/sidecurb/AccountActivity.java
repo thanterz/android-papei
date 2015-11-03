@@ -86,6 +86,16 @@ public class AccountActivity extends ActionBarActivity {
 		Button showpassButton = (Button)findViewById(R.id.showpass);
 		Button showcardButton = (Button)findViewById(R.id.showcard);
 		Button updateDataButton = (Button)findViewById(R.id.updatebtn);
+		Button emailpassButton = (Button)findViewById(R.id.emailpasssentbtn);
+		
+		emailpassButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				new PassResset().execute();
+			}
+		});
 		
 		showpassButton.setOnClickListener(new OnClickListener() {
 			
@@ -145,6 +155,8 @@ public class AccountActivity extends ActionBarActivity {
 			}
 		
 		});
+		
+		
 		
 		mDrawerList = (ListView)findViewById(R.id.navList);
 	 	mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
@@ -435,5 +447,86 @@ class UpdateAccountApi extends AsyncTask<Void, Void, Boolean> {
 	}
 
 }
+
+class PassResset	 extends AsyncTask<Void, Void, Boolean> {
+	
+	private String uname;
+
+	@Override
+	protected Boolean doInBackground(Void... params) {
+		// TODO: attempt authentication against a network service.
+		HttpClient httppostclient = new DefaultHttpClient();
+		HttpPost httppost = new HttpPost("http://www.theama.info/curbweb/rest-auth/password/reset/");
+		httppost.setHeader("Authorization","Token "+ mykey);
+		//httpput.setHeader("Content-Type", "application/json");
+		httppost.setHeader("X-CSRFToken",cr);
+		httppost.setHeader("Cookie","csrftoken="+cr);
+		httppost.setHeader("Cookie","sessionid="+sessionString);
+		List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+		EditText editTextName = (EditText)findViewById(R.id.emailpassinput);
+		nameValuePairs.add(new BasicNameValuePair("email", editTextName.getText().toString()));
+		try {
+			httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+		} catch (UnsupportedEncodingException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+        HttpResponse response2 = null;
+		try {
+			response2 = httppostclient.execute(httppost);
+			
+		} catch (ClientProtocolException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+        try {
+			json2 = EntityUtils.toString(response2.getEntity());
+			
+			JSONObject object = new JSONObject(json2);
+			if(object.isNull("success")){
+				return false;
+			}
+			else{
+				return true;
+			}
+			
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+        return null;
+	}
+
+	@Override
+	protected void onPostExecute(final Boolean success) {
+		if(success.equals(true)){
+			//Intent intent = new Intent(AccountActivity.this, MainScreenActivity.class);
+		    //startActivity(intent);
+			try {
+				Toast.makeText(getApplicationContext(), "Pass reset instructions on your email!", Toast.LENGTH_SHORT).show();
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}	
+        }
+		else{
+			Toast.makeText(getApplicationContext(), "Pass reset error.Try again!", Toast.LENGTH_SHORT).show();
+		}
+	}
+
+}
+
+
 }
 

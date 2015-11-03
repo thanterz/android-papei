@@ -194,7 +194,7 @@
 	        android:layout_height="wrap_content"
 	        android:hint="@string/emailpass"
 	        android:textSize="15sp"
-	        android:inputType="textPassword"
+	        android:inputType="text"
 	        />
     	
     	</LinearLayout>
